@@ -6,7 +6,7 @@ interface AppProps {
 }
 
 const App = ({arg}: AppProps) => {
-  return <div class="notification is-primary">{`Hello, ${arg}!`}</div>;
+  return <div className={"notification is-primary"}>{`Hello, ${arg}!`}</div>;
 };
 
 document.addEventListener("DOMContentLoaded", () => {
