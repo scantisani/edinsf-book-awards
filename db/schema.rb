@@ -20,8 +20,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_06_195132) do
     t.date "published_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.date "read_at", null: false
-    t.string "chosen_by", null: false
+    t.date "read_at", default: -> { "now()" }, null: false
+    t.string "chosen_by", default: "Unknown", null: false
   end
 
 end
