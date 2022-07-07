@@ -8,7 +8,7 @@ RSpec.describe Book, type: :model do
         author: "Ursula K. Le Guin",
         published_at: Time.zone.new(1969),
         read_at: Time.zone.new(2018, 3),
-        chosen_by: 'Susan'
+        chosen_by: "Susan"
       }
     end
 
@@ -49,7 +49,6 @@ RSpec.describe Book, type: :model do
 
       it "will fail with an appropriate error message" do
         expect(book.errors.full_messages).to include("Author can't be blank")
-        expect(book)
       end
     end
 
@@ -101,7 +100,7 @@ RSpec.describe Book, type: :model do
           author: "Octavia Butler",
           published_at: Time.zone.at(1979),
           read_at: book.read_at,
-          chosen_by: 'Rory'
+          chosen_by: "Rory"
         })
       end
 
