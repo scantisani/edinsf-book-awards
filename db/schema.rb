@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_06_195132) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_07_211414) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_06_195132) do
     t.datetime "updated_at", null: false
     t.date "read_at", default: -> { "now()" }, null: false
     t.string "chosen_by", default: "Unknown", null: false
+    t.index ["read_at"], name: "index_books_on_read_at", unique: true
   end
 
 end
