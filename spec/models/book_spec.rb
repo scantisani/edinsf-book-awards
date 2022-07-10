@@ -6,8 +6,8 @@ RSpec.describe Book, type: :model do
       {
         title: "The Left Hand of Darkness",
         author: "Ursula K. Le Guin",
-        published_at: Time.zone.new(1969),
-        read_at: Time.zone.new(2018, 3),
+        published_at: Time.utc(1969),
+        read_at: Time.utc(2018, 3),
         chosen_by: "Susan"
       }
     end
