@@ -1,11 +1,26 @@
 import * as React from 'react'
+import BookCard from './book_card'
 
-interface AppProps {
-  arg: string;
-}
+const App = () => {
+  const books = [
+    { title: 'The Monk', author: 'Matthew Lewis' },
+    { title: 'Plum Rains', author: 'Andromeda Romano-Lax' },
+    { title: 'A Memory Called Empire', author: 'Arkady Martine' },
+    { title: 'The Memory Police', author: 'Yoko Ogawa' },
+    { title: 'Jonathan Strange & Mr Norrell', author: 'Susanna Clarke' },
+    { title: 'Before the Coffee Gets Cold', author: 'Toshikazu Kawaguchi' },
+    { title: 'Infinite Detail', author: 'Tim Maughan' },
+    { title: 'The Affirmation', author: 'Christopher Priest' },
+    { title: "Rocannon's World", author: 'Ursula K. le Guin' },
+    { title: 'The Elementals', author: 'Michael McDowell' },
+    { title: 'Civilwarland in Bad Decline', author: 'George Saunders' }
+  ]
 
-const App = ({ arg }: AppProps) => {
-  return <div className={'notification is-primary'}>{`Hello, ${arg}!`}</div>
+  return (
+    <div className='container is-max-desktop'>
+      {books.map(({ title, author }) => <BookCard title={title} author={author} key={title}/>)}
+    </div>
+  )
 }
 
 export default App
