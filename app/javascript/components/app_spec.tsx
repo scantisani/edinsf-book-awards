@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import App from './application'
+import App from './app'
 import * as React from 'react'
 
 test('main page renders text', () => {
