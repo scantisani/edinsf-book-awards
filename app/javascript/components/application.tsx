@@ -14,3 +14,5 @@ document.addEventListener('DOMContentLoaded', () => {
   const root = createRoot(container!)
   root.render(<App arg="Rails 7 with ESBuild"/>)
 })
+
+export default App
