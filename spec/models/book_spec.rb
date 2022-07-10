@@ -114,8 +114,8 @@ RSpec.describe Book, type: :model do
         described_class.create(creation_params.except(:chosen_by))
       end
 
-      it "will fail with an appropriate error message" do
-        expect(book.errors.full_messages).to include("Chosen by can't be blank")
+      it "will have the default value 'Unknown'" do
+        expect(book.chosen_by).to eq("Unknown")
       end
     end
 
