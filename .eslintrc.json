@@ -5,7 +5,10 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "standard"
+        "standard-with-typescript"
+    ],
+    "ignorePatterns": [
+        "app/assets/**"
     ],
     "overrides": [
         {
@@ -23,6 +26,7 @@
             "jsx": true
         },
         "ecmaVersion": "latest",
+        "project": "./tsconfig.json",
         "sourceType": "module"
     },
     "plugins": [

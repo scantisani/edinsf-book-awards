@@ -101,6 +101,10 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "include": [
-    "./jest-setup.ts"
+    "./jest-setup.ts",
+    "app/javascript/**/*",
+    "cypress/**/*",
+    "./cypress.config.ts",
+    "./jest.config.js"
   ]
 }
