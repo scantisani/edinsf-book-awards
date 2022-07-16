@@ -4,6 +4,6 @@ import App from './components/app'
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('container')
-  const root = createRoot(container!)
-  root.render(<App arg={'Rails 7 with ESBuild'} />)
+  const root = createRoot(container as Element)
+  root.render(<App />)
 })

@@ -3,7 +3,7 @@ import BookCard from './book_card'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const App = () => {
+const App = (): JSX.Element => {
   const [loading, setLoading] = useState(true)
   const [books, setBooks] = useState([])
 
@@ -13,9 +13,12 @@ const App = () => {
         setBooks(response.data)
         setLoading(false)
       })
+      .catch(() => {
+        setLoading(false)
+      })
   }, [])
 
-  const bookCards = () => {
+  const bookCards = (): JSX.Element[] => {
     return books.map(({ id, title, author }) => <BookCard title={title} author={author} key={id}/>)
   }
 
