@@ -31,4 +31,17 @@ describe('App', () => {
       expect(screen.getByText(author)).toBeInTheDocument()
     }
   })
+
+  it('renders "Failed to load books" when the request fails', async () => {
+    server.use(
+      rest.get('/books', (req, res, ctx) => {
+        return res(ctx.status(500))
+      })
+    )
+
+    render(<App/>)
+
+    await waitForElementToBeRemoved(() => screen.queryByText(/loading/i))
+    expect(screen.getByText(/failed to load books/i)).toBeInTheDocument()
+  })
 })

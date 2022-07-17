@@ -20,4 +20,13 @@ describe('main page', () => {
       cy.contains('.card', title).contains(author)
     })
   })
+
+  describe('when getting books fails', () => {
+    beforeEach(() => cy.intercept('GET', '/books*', { statusCode: 500 }))
+
+    it('displays an error message', () => {
+      cy.visit('/')
+      cy.contains('Failed to load books')
+    })
+  })
 })
