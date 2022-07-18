@@ -80,7 +80,5 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  database: edinsf_book_awards_production
-  username: edinsf_book_awards
-  password: <%= ENV["EDINSF_BOOK_AWARDS_DATABASE_PASSWORD"] %>
+  adapter: postgresql
+  url: <%= ENV["DATABASE_URL"] %>
