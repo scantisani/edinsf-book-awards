@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-const BookCard = ({ title, author }: { title: string, author: string }): JSX.Element => {
+const BookCard = ({ id, title, author }: { id: number, title: string, author: string }): JSX.Element => {
   return (
     <div className='card'>
       <div className='card-header has-background-primary'>

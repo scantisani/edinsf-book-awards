@@ -21,7 +21,7 @@ const App = (): JSX.Element => {
   }, [])
 
   const bookCards = (): JSX.Element[] => {
-    return books.map(({ id, title, author }) => <BookCard title={title} author={author} key={id}/>)
+    return books.map(({ id, title, author }) => <BookCard id={id} title={title} author={author} key={id}/>)
   }
 
   const content = (): JSX.Element => {
