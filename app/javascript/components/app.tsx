@@ -2,12 +2,13 @@ import * as React from 'react'
 import BookCard from './book_card'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { Book } from './book'
 
 const App = (): JSX.Element => {
   enum Status { LOADING, SUCCESS, ERROR }
 
   const [status, setStatus] = useState(Status.LOADING)
-  const [books, setBooks] = useState([])
+  const [books, setBooks] = useState<Book[]>([])
 
   useEffect(() => {
     axios.get('/books')
@@ -21,7 +22,7 @@ const App = (): JSX.Element => {
   }, [])
 
   const bookCards = (): JSX.Element[] => {
-    return books.map(({ id, title, author }) => <BookCard id={id} title={title} author={author} key={id}/>)
+    return books.map(book => <BookCard {...book} key={book.id}/>)
   }
 
   const content = (): JSX.Element => {
