@@ -2,6 +2,8 @@ import * as React from 'react'
 import BookCard from './book_card'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { DndContext, DragEndEvent, MouseSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { Book } from './book'
 
 const App = (): JSX.Element => {
@@ -33,9 +35,33 @@ const App = (): JSX.Element => {
     }
   }
 
+  const handleDragEnd = (event: DragEndEvent): void => {
+    const { active, over } = event
+    if (over == null) {
+      return
+    }
+
+    if (active.id !== over.id) {
+      setBooks(books => {
+        const oldIndex = books.findIndex(book => book.id === active.id)
+        const newIndex = books.findIndex(book => book.id === over.id)
+
+        return arrayMove(books, oldIndex, newIndex)
+      })
+    }
+  }
+
+  const sensors = useSensors(
+    useSensor(MouseSensor)
+  )
+
   return (
     <div className='container is-max-desktop'>
-      {content()}
+      <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
+        <SortableContext items={books} strategy={verticalListSortingStrategy}>
+          {content()}
+        </SortableContext>
+      </DndContext>
     </div>
   )
 }

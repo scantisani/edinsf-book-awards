@@ -29,4 +29,25 @@ describe('main page', () => {
       cy.contains('Failed to load books')
     })
   })
+
+  it('allows books to be reordered', () => {
+    cy.visit('/')
+
+    const firstBookTitle = books[0].title
+    const secondBookTitle = books[1].title
+
+    cy.contains('.card', firstBookTitle)
+      .next()
+      .contains(secondBookTitle)
+
+    cy.contains('.card', firstBookTitle)
+      .trigger('mousedown')
+
+    cy.contains('.card', secondBookTitle)
+      .trigger('mouseup')
+
+    cy.contains('.card', secondBookTitle)
+      .next()
+      .contains(firstBookTitle)
+  })
 })
