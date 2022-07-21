@@ -24,7 +24,7 @@ const App = (): JSX.Element => {
   const content = (): JSX.Element => {
     switch (status) {
       case Status.LOADING: return <div>Loading...</div>
-      case Status.SUCCESS: return <SortableBookList initialBooks={books} />
+      case Status.SUCCESS: return <SortableBookList books={books} onBooksChange={setBooks} />
       case Status.ERROR: return <div>Failed to load books.</div>
     }
   }

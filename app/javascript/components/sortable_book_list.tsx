@@ -2,12 +2,14 @@ import { DndContext, DragEndEvent, MouseSensor, useSensor, useSensors } from '@d
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import * as React from 'react'
 import { Book } from './book'
-import { useState } from 'react'
 import BookList from './book_list'
 
-const SortableBookList = ({ initialBooks }: { initialBooks: Book[] }): JSX.Element => {
-  const [books, setBooks] = useState(initialBooks)
+interface SortableBookListProps {
+  books: Book[]
+  onBooksChange: (books: Book[]) => void
+}
 
+const SortableBookList = ({ books, onBooksChange }: SortableBookListProps): JSX.Element => {
   const handleDragEnd = (event: DragEndEvent): void => {
     const { active, over } = event
     if (over == null) {
@@ -15,12 +17,10 @@ const SortableBookList = ({ initialBooks }: { initialBooks: Book[] }): JSX.Eleme
     }
 
     if (active.id !== over.id) {
-      setBooks(books => {
-        const oldIndex = books.findIndex(book => book.id === active.id)
-        const newIndex = books.findIndex(book => book.id === over.id)
+      const oldIndex = books.findIndex(book => book.id === active.id)
+      const newIndex = books.findIndex(book => book.id === over.id)
 
-        return arrayMove(books, oldIndex, newIndex)
-      })
+      onBooksChange(arrayMove(books, oldIndex, newIndex))
     }
   }
 

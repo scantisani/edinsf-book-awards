@@ -10,13 +10,13 @@ describe('SortableBookList', () => {
   ]
 
   it('renders nothing if `books` is empty', () => {
-    render(<SortableBookList initialBooks={[]}/>)
+    render(<SortableBookList books={[]} onBooksChange={() => {}} />)
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 
   it('renders as many book items as there are books', () => {
-    render(<SortableBookList initialBooks={books}/>)
+    render(<SortableBookList books={books} onBooksChange={() => {}} />)
 
     expect(screen.getAllByRole('button').length).toEqual(3)
     for (const { title, author } of books) {
@@ -27,7 +27,7 @@ describe('SortableBookList', () => {
 
   // see Cypress spec for a more comprehensive drag-and-drop test
   it('allows items to be dragged', async () => {
-    render(<SortableBookList initialBooks={books}/>)
+    render(<SortableBookList books={books} onBooksChange={() => {}} />)
 
     const firstCard = screen.getByRole('button', { name: new RegExp(books[0].title, 'i') })
 
