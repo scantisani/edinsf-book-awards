@@ -13,4 +13,10 @@ describe('BookCard', () => {
     expect(screen.getByText(title)).toBeInTheDocument()
     expect(screen.getByText(author)).toBeInTheDocument()
   })
+
+  it('has a `button` role', () => {
+    render(<BookCard id={id} title={title} author={author}/>)
+
+    expect(screen.getByRole('button')).toBeInTheDocument()
+  })
 })
