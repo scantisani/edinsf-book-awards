@@ -38,7 +38,14 @@ const App = (): JSX.Element => {
   }
 
   return (
-    <div className='container is-max-desktop'>
+    <div className='container is-max-desktop my-3'>
+      <nav className="level">
+        <div className="level-left">
+          <div className="level-item">
+            <h1 className="title">Your Ranking</h1>
+          </div>
+        </div>
+      </nav>
       {content()}
     </div>
   )

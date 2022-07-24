@@ -20,9 +20,10 @@ describe('App', () => {
   afterEach(() => server.resetHandlers())
   afterAll(() => server.close())
 
-  it('renders "Loading" while requesting books, then renders cards with a title and author', async () => {
+  it('renders the title, a "Loading" placeholder, then cards with a title and author', async () => {
     render(<App/>)
 
+    expect(screen.getByText(/your ranking/i)).toBeInTheDocument()
     expect(screen.getByText(/loading/i)).toBeInTheDocument()
 
     await waitForElementToBeRemoved(() => screen.queryByText(/loading/i))

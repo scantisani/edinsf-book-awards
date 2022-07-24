@@ -13,9 +13,10 @@ describe('main page', () => {
     { title: 'Civilwarland in Bad Decline', author: 'George Saunders' }
   ]
 
-  it('displays a card for each book', () => {
+  it('displays the title and a card for each book', () => {
     cy.visit('/')
 
+    cy.contains('Your Ranking')
     books.forEach(({ title, author }) => {
       cy.contains('.card', title).contains(author)
     })
