@@ -37,7 +37,7 @@ describe('main page', () => {
         .trigger('mousedown')
 
       cy.contains('.card', targetTitle)
-        .trigger('mouseup')
+        .trigger('mouseup', { animationDistanceThreshold: 20 })
     }
 
     const firstBookTitle = books[0].title
