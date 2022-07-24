@@ -53,15 +53,23 @@ describe('main page', () => {
         .contains(firstBookTitle)
     })
 
-    it('triggers a call to the `/rankings` endpoint', () => {
+    it('triggers the message "Saving" while saving, then "Saved" on success', () => {
       cy.visit('/')
-      cy.intercept('POST', '/rankings*').as('createRanking')
-
       dragCard(firstBookTitle, secondBookTitle)
 
-      cy.wait('@createRanking')
-        .its('request.body.order')
-        .should('have.ordered.members', [2, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+      cy.contains('Saving...')
+      cy.contains('Saved')
+    })
+
+    describe('when saving the order fails', () => {
+      beforeEach(() => cy.intercept('POST', '/rankings*', { statusCode: 500 }))
+
+      it('displays an error message', () => {
+        cy.visit('/')
+        dragCard(firstBookTitle, secondBookTitle)
+
+        cy.contains("Couldn't connect to the server")
+      })
     })
   })
 })

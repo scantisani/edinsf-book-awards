@@ -37,3 +37,7 @@
 // @import "bulma/sass/layout/section.sass";
 
 @import 'bulma/bulma';
+
+.spinning-circle {
+  @include loader;
+}
