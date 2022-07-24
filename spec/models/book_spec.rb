@@ -12,120 +12,75 @@ RSpec.describe Book, type: :model do
       }
     end
 
-    context "when the title is nil" do
-      let(:book) do
-        described_class.create(creation_params.except(:title))
+    context "when validating title" do
+      it "will fail when it is nil" do
+        record = described_class.create(creation_params.except(:title))
+        expect(record.errors.full_messages).to include("Title can't be blank")
       end
 
-      it "will fail with an appropriate error message" do
-        expect(book.errors.full_messages).to include("Title can't be blank")
-      end
-    end
-
-    context "when the title is blank" do
-      let(:book) do
-        described_class.create(creation_params.merge(title: ""))
-      end
-
-      it "will fail with an appropriate error message" do
-        expect(book.errors.full_messages).to include("Title can't be blank")
+      it "will fail when it is blank" do
+        record = described_class.create(creation_params.merge(title: ""))
+        expect(record.errors.full_messages).to include("Title can't be blank")
       end
     end
 
-    context "when the author is nil" do
-      let(:book) do
-        described_class.create(creation_params.except(:author))
+    context "when validating author" do
+      it "will fail when it is nil" do
+        record = described_class.create(creation_params.except(:author))
+        expect(record.errors.full_messages).to include("Author can't be blank")
       end
 
-      it "will fail with an appropriate error message" do
-        expect(book.errors.full_messages).to include("Author can't be blank")
-      end
-    end
-
-    context "when the author is blank" do
-      let(:book) do
-        described_class.create(creation_params.merge(author: ""))
-      end
-
-      it "will fail with an appropriate error message" do
-        expect(book.errors.full_messages).to include("Author can't be blank")
+      it "will fail when it is blank" do
+        record = described_class.create(creation_params.merge(author: ""))
+        expect(record.errors.full_messages).to include("Author can't be blank")
       end
     end
 
-    context "when the publication date is nil" do
-      let(:book) do
-        described_class.create(creation_params.except(:published_at))
+    context "when validating publication date" do
+      it "will fail when it is nil" do
+        record = described_class.create(creation_params.except(:published_at))
+        expect(record.errors.full_messages).to include("Published at can't be blank")
       end
 
-      it "will fail with an appropriate error message" do
-        expect(book.errors.full_messages).to include("Published at can't be blank")
-      end
-    end
-
-    context "when the publication date is blank" do
-      let(:book) do
-        described_class.create(creation_params.merge(published_at: ""))
-      end
-
-      it "will fail with an appropriate error message" do
-        expect(book.errors.full_messages).to include("Published at can't be blank")
+      it "will fail when it is blank" do
+        record = described_class.create(creation_params.merge(published_at: ""))
+        expect(record.errors.full_messages).to include("Published at can't be blank")
       end
     end
 
-    context "when the read date is nil" do
-      let(:book) do
-        described_class.create(creation_params.except(:read_at))
+    context "when validating read date" do
+      it "will fail when it is nil" do
+        record = described_class.create(creation_params.except(:read_at))
+        expect(record.errors.full_messages).to include("Read at can't be blank")
       end
 
-      it "will fail with an appropriate error message" do
-        expect(book.errors.full_messages).to include("Read at can't be blank")
+      it "will fail when it is blank" do
+        record = described_class.create(creation_params.merge(read_at: ""))
+        expect(record.errors.full_messages).to include("Read at can't be blank")
+      end
+
+      it "will fail when it is not unique" do
+        record = described_class.create(creation_params)
+        record_two = described_class.create(
+          title: "Kindred", author: "Octavia Butler", published_at: Time.zone.at(1979),
+          read_at: record.read_at, chosen_by: "Rory"
+        )
+
+        expect(record_two.errors.full_messages).to include("Read at has already been taken")
       end
     end
 
-    context "when the read date is blank" do
-      let(:book) do
-        described_class.create(creation_params.merge(read_at: ""))
-      end
-
-      it "will fail with an appropriate error message" do
-        expect(book.errors.full_messages).to include("Read at can't be blank")
-      end
-    end
-
-    context "when the read date is not unique" do
-      let(:book) { described_class.create(creation_params) }
-      let(:book_two) do
-        described_class.create({
-          title: "Kindred",
-          author: "Octavia Butler",
-          published_at: Time.zone.at(1979),
-          read_at: book.read_at,
-          chosen_by: "Rory"
-        })
-      end
-
-      it "will fail with an appropriate error message" do
-        expect(book_two.errors.full_messages).to include("Read at has already been taken")
+    context "when validating chooser" do
+      it "will fail when it is blank" do
+        record = described_class.create(creation_params.merge(chosen_by: ""))
+        expect(record.errors.full_messages).to include("Chosen by can't be blank")
       end
     end
 
     context "when the chooser is nil" do
-      let(:book) do
-        described_class.create(creation_params.except(:chosen_by))
-      end
-
       it "will have the default value 'Unknown'" do
-        expect(book.chosen_by).to eq("Unknown")
-      end
-    end
-
-    context "when the chooser is blank" do
-      let(:book) do
-        described_class.create(creation_params.merge(chosen_by: ""))
-      end
-
-      it "will fail with an appropriate error message" do
-        expect(book.errors.full_messages).to include("Chosen by can't be blank")
+        record = described_class.create(creation_params.except(:chosen_by))
+        expect(record.chosen_by).to eq("Unknown")
       end
     end
   end
