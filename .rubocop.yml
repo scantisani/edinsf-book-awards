@@ -24,3 +24,10 @@ RSpec:
   Enabled: true
 Performance:
   Enabled: true
+
+RSpec/ExampleLength:
+  Max: 10
+  CountAsOne:
+    - hash
+    - array
+    - heredoc
