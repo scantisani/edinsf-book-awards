@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { useEffect, useMemo, useState } from 'react'
-import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { Book } from './book'
 import SortableBookList from './sortable_book_list'
+import { createRanking, getBooks } from '../lib/requests'
 
 const App = (): JSX.Element => {
   enum Status { LOADING, SUCCESS, ERROR }
@@ -11,7 +11,7 @@ const App = (): JSX.Element => {
   const [books, setBooks] = useState<Book[]>([])
 
   useEffect(() => {
-    axios.get('/books')
+    getBooks()
       .then(response => {
         setBooks(response.data)
         setStatus(Status.SUCCESS)
@@ -21,16 +21,10 @@ const App = (): JSX.Element => {
       })
   }, [])
 
-  const csrfToken = useMemo((): string => {
-    return document.querySelector('meta[name=\'csrf-token\']')?.getAttribute('content') ?? ''
-  }, [])
-
   const updateRanking = (books: Book[]): void => {
     setBooks(books)
 
-    axios.post('/rankings',
-      { order: books.map(book => book.id) },
-      { headers: { 'X-CSRF-TOKEN': csrfToken } })
+    createRanking(books.map(book => book.id))
       .then(() => {})
       .catch(() => {})
   }
