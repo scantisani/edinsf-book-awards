@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
 import { Book } from './book'
 import SortableBookList from './sortable_book_list'
@@ -21,10 +21,16 @@ const App = (): JSX.Element => {
       })
   }, [])
 
+  const csrfToken = useMemo((): string => {
+    return document.querySelector('meta[name=\'csrf-token\']')?.getAttribute('content') ?? ''
+  }, [])
+
   const updateRanking = (books: Book[]): void => {
     setBooks(books)
 
-    axios.post('/rankings', { order: books.map(book => book.id) })
+    axios.post('/rankings',
+      { order: books.map(book => book.id) },
+      { headers: { 'X-CSRF-TOKEN': csrfToken } })
       .then(() => {})
       .catch(() => {})
   }
