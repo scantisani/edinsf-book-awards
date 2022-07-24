@@ -21,10 +21,18 @@ const App = (): JSX.Element => {
       })
   }, [])
 
+  const updateRanking = (books: Book[]): void => {
+    setBooks(books)
+
+    axios.post('/rankings', { order: books.map(book => book.id) })
+      .then(() => {})
+      .catch(() => {})
+  }
+
   const content = (): JSX.Element => {
     switch (status) {
       case Status.LOADING: return <div>Loading...</div>
-      case Status.SUCCESS: return <SortableBookList books={books} onBooksChange={setBooks} />
+      case Status.SUCCESS: return <SortableBookList books={books} onBooksChange={updateRanking} />
       case Status.ERROR: return <div>Failed to load books.</div>
     }
   }

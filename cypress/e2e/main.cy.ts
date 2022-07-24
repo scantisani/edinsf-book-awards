@@ -30,24 +30,37 @@ describe('main page', () => {
     })
   })
 
-  it('allows books to be reordered', () => {
-    cy.visit('/')
+  describe('reordering books', () => {
+    const dragCard = (sourceTitle: string, targetTitle: string): void => {
+      cy.contains('.card', sourceTitle)
+        .trigger('mousedown')
+
+      cy.contains('.card', targetTitle)
+        .trigger('mouseup')
+    }
 
     const firstBookTitle = books[0].title
     const secondBookTitle = books[1].title
 
-    cy.contains('.card', firstBookTitle)
-      .next()
-      .contains(secondBookTitle)
+    it('can be done via drag and drop', () => {
+      cy.visit('/')
 
-    cy.contains('.card', firstBookTitle)
-      .trigger('mousedown')
+      dragCard(firstBookTitle, secondBookTitle)
 
-    cy.contains('.card', secondBookTitle)
-      .trigger('mouseup')
+      cy.contains('.card', secondBookTitle)
+        .next()
+        .contains(firstBookTitle)
+    })
 
-    cy.contains('.card', secondBookTitle)
-      .next()
-      .contains(firstBookTitle)
+    it('triggers a call to the `/rankings` endpoint', () => {
+      cy.visit('/')
+      cy.intercept('POST', '/rankings*').as('createRanking')
+
+      dragCard(firstBookTitle, secondBookTitle)
+
+      cy.wait('@createRanking')
+        .its('request.body.order')
+        .should('have.ordered.members', [2, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+    })
   })
 })
