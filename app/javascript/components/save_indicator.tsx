@@ -1,7 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlugCircleExclamation, faRocket } from '@fortawesome/free-solid-svg-icons'
 import * as React from 'react'
 import SaveStatus from '../interfaces/save_status'
+import { IconCloudOff, IconRocket } from '@tabler/icons'
 
 const SaveIndicator = ({ saveStatus }: { saveStatus: SaveStatus }): JSX.Element => {
   const Saving = (): JSX.Element => {
@@ -20,7 +19,7 @@ const SaveIndicator = ({ saveStatus }: { saveStatus: SaveStatus }): JSX.Element 
       <span className="icon-text">
         <span className="has-text-centered">Saved</span>
         <span className="icon has-text-success">
-          <FontAwesomeIcon icon={faRocket} size={'lg'}/>
+          <IconRocket />
         </span>
       </span>
     )
@@ -31,7 +30,7 @@ const SaveIndicator = ({ saveStatus }: { saveStatus: SaveStatus }): JSX.Element 
       <span className="icon-text">
         <span>Couldn&apos;t connect to the server</span>
         <span className="icon has-text-danger">
-          <FontAwesomeIcon icon={faPlugCircleExclamation} size={'lg'}/>
+          <IconCloudOff />
         </span>
       </span>
     )
