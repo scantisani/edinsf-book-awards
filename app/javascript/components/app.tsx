@@ -1,15 +1,14 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { Book } from './book'
+import { Book } from '../interfaces/book'
 import SortableBookList from './sortable_book_list'
 import { createRanking, getBooks } from '../lib/requests'
 import SaveIndicator from './save_indicator'
 import SaveStatus from '../interfaces/save_status'
+import LoadStatus from '../interfaces/load_status'
 
 const App = (): JSX.Element => {
-  enum LoadStatus { LOADING, SUCCESS, ERROR }
   const [loadStatus, setLoadStatus] = useState(LoadStatus.LOADING)
-
   const [saveStatus, setSaveStatus] = useState(SaveStatus.INITIAL)
 
   const [books, setBooks] = useState<Book[]>([])

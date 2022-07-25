@@ -1,7 +1,7 @@
 import { DndContext, DragEndEvent, MouseSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import * as React from 'react'
-import { Book } from './book'
+import { Book } from '../interfaces/book'
 import BookList from './book_list'
 
 interface SortableBookListProps {

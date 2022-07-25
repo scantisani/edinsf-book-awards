@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Book } from './book'
+import { Book } from '../interfaces/book'
 
 const BookCard = ({ id, title, author }: Book): JSX.Element => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id })

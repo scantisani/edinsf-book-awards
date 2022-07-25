@@ -1,4 +1,4 @@
-import { Book } from './book'
+import { Book } from '../interfaces/book'
 import BookCard from './book_card'
 import * as React from 'react'
 
