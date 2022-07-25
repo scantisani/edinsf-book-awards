@@ -17,7 +17,7 @@ const SaveIndicator = ({ saveStatus }: { saveStatus: SaveStatus }): JSX.Element 
   const Saved = (): JSX.Element => {
     return (
       <span className="icon-text">
-        <span className="has-text-centered">Saved</span>
+        <span className="has-text-centered">Saved!</span>
         <span className="icon has-text-success">
           <IconRocket />
         </span>
@@ -28,7 +28,7 @@ const SaveIndicator = ({ saveStatus }: { saveStatus: SaveStatus }): JSX.Element 
   const Error = (): JSX.Element => {
     return (
       <span className="icon-text">
-        <span>Couldn&apos;t connect to the server</span>
+        <span>Couldn&apos;t connect to the server.</span>
         <span className="icon has-text-danger">
           <IconCloudOff />
         </span>
