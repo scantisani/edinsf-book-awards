@@ -1,17 +1,17 @@
 require "rails_helper"
 
 RSpec.describe Book, type: :model do
-  describe "creation" do
-    let(:creation_params) do
-      {
-        title: "The Left Hand of Darkness",
-        author: "Ursula K. Le Guin",
-        published_at: Time.utc(1969),
-        read_at: Time.utc(2018, 3),
-        chosen_by: "Susan"
-      }
-    end
+  let(:creation_params) do
+    {
+      title: "The Left Hand of Darkness",
+      author: "Ursula K. Le Guin",
+      published_at: Time.utc(1969),
+      read_at: Time.utc(2018, 3),
+      chosen_by: "Susan"
+    }
+  end
 
+  describe "creation" do
     context "when validating title" do
       it "will fail when it is nil" do
         record = described_class.create(creation_params.except(:title))
@@ -82,6 +82,16 @@ RSpec.describe Book, type: :model do
         record = described_class.create(creation_params.except(:chosen_by))
         expect(record.chosen_by).to eq("Unknown")
       end
+    end
+  end
+
+  describe "deletion" do
+    it "removes all associated rankings" do
+      record = described_class.create(creation_params)
+      ranking = record.rankings.create(position: 0)
+
+      record.destroy
+      expect(ranking).not_to be_persisted
     end
   end
 end
