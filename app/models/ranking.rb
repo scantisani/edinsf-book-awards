@@ -1,5 +1,6 @@
 class Ranking < ApplicationRecord
   belongs_to :book
+  validates :book, uniqueness: true
 
   validates :position,
     presence: true,

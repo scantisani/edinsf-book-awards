@@ -18,6 +18,16 @@ RSpec.describe Ranking, type: :model do
       end
     end
 
+    context "when one already exists for the given Book" do
+      let(:record) { described_class.create(creation_params.merge(position: 2)) }
+
+      before { described_class.create(creation_params) }
+
+      it "will fail with an appropriate error message" do
+        expect(record.errors.full_messages).to include("Book has already been taken")
+      end
+    end
+
     context "when validating position" do
       it "will fail when it is nil" do
         record = described_class.create(creation_params.merge(position: nil))
