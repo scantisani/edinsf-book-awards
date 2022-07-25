@@ -34,7 +34,7 @@ const App = (): JSX.Element => {
       .catch(() => setSaveStatus(SaveStatus.ERROR))
   }
 
-  const content = (): JSX.Element => {
+  const BookRanker = (): JSX.Element => {
     switch (loadStatus) {
       case LoadStatus.LOADING: return <div>Loading...</div>
       case LoadStatus.SUCCESS: return <SortableBookList books={books} onBooksChange={updateRanking} />
@@ -56,7 +56,7 @@ const App = (): JSX.Element => {
           </div>
         </div>
       </nav>
-      {content()}
+      <BookRanker />
     </div>
   )
 }
