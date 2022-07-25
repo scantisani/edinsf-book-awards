@@ -33,16 +33,8 @@ const App = (): JSX.Element => {
       .catch(() => setSaveStatus(SaveStatus.ERROR))
   }
 
-  const BookRanker = (): JSX.Element => {
-    switch (loadStatus) {
-      case LoadStatus.LOADING: return <div>Loading...</div>
-      case LoadStatus.SUCCESS: return <SortableBookList books={books} onBooksChange={updateRanking} />
-      case LoadStatus.ERROR: return <div>Failed to load books.</div>
-    }
-  }
-
-  return (
-    <div className='container is-max-desktop my-3'>
+  const TopLevelNav = (): JSX.Element => {
+    return (
       <nav className="level">
         <div className="level-left">
           <div className="level-item">
@@ -55,6 +47,20 @@ const App = (): JSX.Element => {
           </div>
         </div>
       </nav>
+    )
+  }
+
+  const BookRanker = (): JSX.Element => {
+    switch (loadStatus) {
+      case LoadStatus.LOADING: return <div>Loading...</div>
+      case LoadStatus.SUCCESS: return <SortableBookList books={books} onBooksChange={updateRanking} />
+      case LoadStatus.ERROR: return <div>Failed to load books.</div>
+    }
+  }
+
+  return (
+    <div className='container is-max-desktop my-3'>
+      <TopLevelNav />
       <BookRanker />
     </div>
   )
