@@ -73,5 +73,18 @@ describe('main page', () => {
         cy.contains('Saving changes failed')
       })
     })
+
+    it('persists across refreshes', () => {
+      cy.visit('/')
+      dragCard(firstBookTitle, secondBookTitle)
+
+      // wait for the request to finish
+      cy.contains('Saved')
+
+      cy.reload()
+      cy.contains('.card', secondBookTitle)
+        .next()
+        .contains(firstBookTitle)
+    })
   })
 })
