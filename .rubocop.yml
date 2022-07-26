@@ -25,6 +25,9 @@ RSpec:
 Performance:
   Enabled: true
 
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: aligned
+
 RSpec/ExampleLength:
   Max: 10
   CountAsOne:
