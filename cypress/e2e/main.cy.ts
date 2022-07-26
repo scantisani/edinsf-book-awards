@@ -70,7 +70,7 @@ describe('main page', () => {
         cy.visit('/')
         dragCard(firstBookTitle, secondBookTitle)
 
-        cy.contains("Couldn't connect to the server")
+        cy.contains('Saving changes failed')
       })
     })
   })

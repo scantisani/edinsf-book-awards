@@ -25,6 +25,6 @@ describe('SaveIndicator', () => {
   it('renders an error message when saving fails', () => {
     render(<SaveIndicator saveStatus={SaveStatus.ERROR} />)
 
-    expect(screen.getByText(/couldn't connect to the server/i)).toBeInTheDocument()
+    expect(screen.getByText(/saving changes failed/i)).toBeInTheDocument()
   })
 })
