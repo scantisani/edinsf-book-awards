@@ -10,14 +10,25 @@ RSpec.describe RankingsController, type: :request do
       post "/rankings", params: {order: order}
     end
 
-    context "with a valid ordering for some books" do
-      it "returns successfully" do
-        make_request!
-        expect(response).to be_successful
+    it "returns successfully" do
+      make_request!
+      expect(response).to be_successful
+    end
+
+    it "creates new Rankings" do
+      expect { make_request! }.to change(Ranking, :count).by(2)
+
+      expect(Ranking.where(position: 0, book: book_one)).to exist
+      expect(Ranking.where(position: 1, book: book_two)).to exist
+    end
+
+    context "when Rankings already exist for those books" do
+      before do
+        Ranking.create([{book: book_one, position: 1}, {book: book_two, position: 0}])
       end
 
-      it "creates new Rankings" do
-        expect { make_request! }.to change(Ranking, :count).by(2)
+      it "overwrites them" do
+        expect { make_request! }.not_to change(Ranking, :count)
 
         expect(Ranking.where(position: 0, book: book_one)).to exist
         expect(Ranking.where(position: 1, book: book_two)).to exist

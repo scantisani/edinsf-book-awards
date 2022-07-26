@@ -1,5 +1,6 @@
 class RankingsController < ApplicationController
   def create
+    Ranking.destroy_all
     Ranking.create!(ranking_attributes)
   rescue ActiveRecord::RecordInvalid
     head :unprocessable_entity
