@@ -2,17 +2,52 @@ require "rails_helper"
 
 RSpec.describe RankingsController, type: :request do
   describe "#create" do
-    context "with valid parameters" do
-      let!(:book_one) { Book.create(title: "The Monk", author: "Matthew Lewis", published_at: Time.utc(1796), read_at: Time.utc(2021, 1), chosen_by: "Amy") }
-      let!(:book_two) { Book.create(title: "Plum Rains", author: "Andromeda Romano-Lax", published_at: Time.utc(2018), read_at: Time.utc(2021, 2), chosen_by: "Scott") }
+    let!(:book_one) { Book.create(title: "The Monk", author: "Matthew Lewis", published_at: Time.utc(1796), read_at: Time.utc(2021, 1), chosen_by: "Amy") }
+    let!(:book_two) { Book.create(title: "Plum Rains", author: "Andromeda Romano-Lax", published_at: Time.utc(2018), read_at: Time.utc(2021, 2), chosen_by: "Scott") }
+    let(:order) { [book_one.id, book_two.id] }
 
-      let(:make_request!) do
-        post "/rankings", params: {order: [book_one.id, book_two.id]}
-      end
+    let(:make_request!) do
+      post "/rankings", params: {order: order}
+    end
 
+    context "with a valid ordering for some books" do
       it "returns successfully" do
         make_request!
         expect(response).to be_successful
+      end
+
+      it "creates new Rankings" do
+        expect { make_request! }.to change(Ranking, :count).by(2)
+
+        expect(Ranking.where(position: 0, book: book_one)).to exist
+        expect(Ranking.where(position: 1, book: book_two)).to exist
+      end
+    end
+
+    context "with an overly long ordering" do
+      let(:order) { (1..20).to_a }
+
+      it "is unsuccessful" do
+        make_request!
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "with a book that doesn't exist" do
+      let(:order) { [-1, book_one.id] }
+
+      it "is unsuccessful" do
+        make_request!
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "when the same book appears multiple times in one ordering" do
+      let(:order) { [book_one.id, book_one.id] }
+
+      it "is unsuccessful" do
+        make_request!
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
