@@ -32,6 +32,8 @@ describe('main page', () => {
   })
 
   describe('reordering books', () => {
+    beforeEach(() => cy.request('/cypress_rails_reset_state'))
+
     const dragCard = (sourceTitle: string, targetTitle: string): void => {
       cy.contains('.card', sourceTitle)
         .trigger('mousedown')
