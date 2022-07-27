@@ -7,7 +7,7 @@ RSpec.describe RankingsController, type: :request do
     let(:order) { [book_one.id, book_two.id] }
 
     let(:make_request!) do
-      post "/rankings", params: {order: order}
+      post "/rankings", params: {order: order}, as: :json
     end
 
     it "returns successfully" do
@@ -23,8 +23,11 @@ RSpec.describe RankingsController, type: :request do
     end
 
     context "when Rankings already exist for those books" do
+      let(:book_three) { Book.create(title: "A Memory Called Empire", author: "Arkady Martine", published_at: Time.utc(2019), read_at: Time.utc(2021, 3), chosen_by: "Bruno") }
+      let(:order) { [book_one.id, book_two.id, book_three.id] }
+
       before do
-        Ranking.create([{book: book_one, position: 1}, {book: book_two, position: 0}])
+        Ranking.create!([{book: book_one, position: 1}, {book: book_two, position: 0}, {book: book_three, position: 2}])
       end
 
       it "overwrites them" do
@@ -32,6 +35,7 @@ RSpec.describe RankingsController, type: :request do
 
         expect(Ranking.where(position: 0, book: book_one)).to exist
         expect(Ranking.where(position: 1, book: book_two)).to exist
+        expect(Ranking.where(position: 2, book: book_three)).to exist
       end
     end
 
@@ -58,7 +62,7 @@ RSpec.describe RankingsController, type: :request do
 
       it "is unsuccessful" do
         make_request!
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:bad_request)
       end
     end
   end
