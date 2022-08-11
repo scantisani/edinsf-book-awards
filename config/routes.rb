@@ -3,4 +3,5 @@ Rails.application.routes.draw do
 
   resources :books, only: :index
   resources :rankings, only: :create
+  resources :users, only: :show, param: :uuid
 end
