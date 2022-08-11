@@ -1,3 +1,5 @@
+User.create!(name: "Scott", uuid: "f172ffd1-4d06-4a3b-925c-30bec3bbf60c")
+
 Book.create!([
   {title: "The Monk", author: "Matthew Lewis", published_at: Time.utc(1796).getlocal, read_at: Time.utc(2021, 1), chosen_by: "Amy"},
   {title: "Plum Rains", author: "Andromeda Romano-Lax", published_at: Time.utc(2018), read_at: Time.utc(2021, 2), chosen_by: "Scott"},
