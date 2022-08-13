@@ -11,7 +11,7 @@ RSpec.describe UsersController, type: :request do
         expect(response).to redirect_to(root_url)
       end
 
-      it "sets the session cookie to the user's ID" do
+      it "sets the user ID in the session cookie" do
         expect(session[:user_id]).to eq(user.id)
       end
     end
@@ -28,10 +28,24 @@ RSpec.describe UsersController, type: :request do
     end
 
     context "when the UUID is invalid" do
-      before { get user_path(SecureRandom.uuid) }
+      let(:make_request!) { get user_path(SecureRandom.uuid) }
 
       it "returns a 404" do
+        make_request!
         expect(response).to have_http_status(:not_found)
+      end
+
+      it "does not set the user ID in the session cookie" do
+        make_request!
+        expect(session[:user_id]).to be_nil
+      end
+
+      context "when the user is already logged in" do
+        before { get user_path(user.uuid) }
+
+        it "removes the user ID in the session cookie" do
+          expect { make_request! }.to change { session[:user_id] }.from(user.id).to(nil)
+        end
       end
     end
   end
