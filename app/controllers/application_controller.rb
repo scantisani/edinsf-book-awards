@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  before_action :authorize
+
   private
 
   def authorize

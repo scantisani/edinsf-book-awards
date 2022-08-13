@@ -1,6 +1,4 @@
 class BooksController < ApplicationController
-  before_action :authorize
-
   def index
     ordered_books = Book.left_joins(:rankings)
                         .select(:id, :title, :author)

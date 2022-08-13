@@ -1,6 +1,4 @@
 class RankingsController < ApplicationController
-  before_action :authorize
-
   def create
     return head :bad_request unless valid_request?
 
