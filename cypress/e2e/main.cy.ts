@@ -1,4 +1,6 @@
 describe('main page', () => {
+  beforeEach(() => cy.login())
+
   const books = [
     { title: 'The Monk', author: 'Matthew Lewis' },
     { title: 'Plum Rains', author: 'Andromeda Romano-Lax' },

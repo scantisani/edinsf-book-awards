@@ -36,3 +36,17 @@
 //     }
 //   }
 // }
+Cypress.Commands.add('login', () => {
+  cy.visit('users/f172ffd1-4d06-4a3b-925c-30bec3bbf60c')
+})
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Cypress {
+    interface Chainable {
+      login: () => Chainable<void>
+    }
+  }
+}
+
+export {}
