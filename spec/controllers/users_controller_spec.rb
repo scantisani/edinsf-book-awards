@@ -49,4 +49,33 @@ RSpec.describe UsersController, type: :request do
       end
     end
   end
+
+  describe "#logout" do
+    context "when the user is logged in" do
+      before do
+        get user_path(user.uuid)
+        post logout_path
+      end
+
+      it "is successful" do
+        expect(response).to have_http_status(:no_content)
+      end
+
+      it "removes the user ID in the session cookie" do
+        expect(session[:user_id]).to be_nil
+      end
+    end
+
+    context "when the user is not logged in" do
+      before { post logout_path }
+
+      it "is successful" do
+        expect(response).to have_http_status(:no_content)
+      end
+
+      it "does nothing to the session cookie" do
+        expect(session[:user_id]).to be_nil
+      end
+    end
+  end
 end
