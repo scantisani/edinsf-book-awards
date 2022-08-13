@@ -1,7 +1,10 @@
 require "rails_helper"
+require "support/shared_contexts/login"
 
 RSpec.describe RankingsController, type: :request do
   describe "#create" do
+    include_context "when logged in"
+
     let!(:book_one) { Book.create(title: "The Monk", author: "Matthew Lewis", published_at: Time.utc(1796), read_at: Time.utc(2021, 1), chosen_by: "Amy") }
     let!(:book_two) { Book.create(title: "Plum Rains", author: "Andromeda Romano-Lax", published_at: Time.utc(2018), read_at: Time.utc(2021, 2), chosen_by: "Scott") }
     let(:order) { [book_one.id, book_two.id] }
@@ -20,6 +23,19 @@ RSpec.describe RankingsController, type: :request do
 
       expect(Ranking.where(position: 0, book: book_one)).to exist
       expect(Ranking.where(position: 1, book: book_two)).to exist
+    end
+
+    context "when the user does not have permission to update rankings" do
+      include_context "when logged out"
+
+      it "returns the 'Unauthorized' response code" do
+        make_request!
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it "does not create any Rankings" do
+        expect { make_request! }.not_to change(Ranking, :count)
+      end
     end
 
     context "when Rankings already exist for those books" do

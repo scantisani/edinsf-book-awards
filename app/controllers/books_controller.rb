@@ -8,10 +8,4 @@ class BooksController < ApplicationController
 
     render json: ordered_books.to_json
   end
-
-  private
-
-  def authorize
-    head :unauthorized if logged_out?
-  end
 end
