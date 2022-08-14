@@ -3,7 +3,9 @@ require "rails_helper"
 RSpec.describe Ranking, type: :model do
   describe "creation" do
     let!(:book) { Book.create(title: "The Monk", author: "Matthew Lewis", published_at: Time.utc(1796), read_at: Time.utc(2021, 1), chosen_by: "Amy") }
-    let(:creation_params) { {book: book, position: 1} }
+    let!(:user) { User.create(name: "Scott") }
+
+    let(:creation_params) { {user: user, book: book, position: 1} }
 
     it "will succeed with valid parameters" do
       record = described_class.create(creation_params)
@@ -18,13 +20,21 @@ RSpec.describe Ranking, type: :model do
       end
     end
 
-    context "when one already exists for the given Book" do
+    context "when one already exists for the given Book and User" do
       let(:record) { described_class.create(creation_params.merge(position: 2)) }
 
       before { described_class.create(creation_params) }
 
       it "will fail with an appropriate error message" do
         expect(record.errors.full_messages).to include("Book has already been taken")
+      end
+    end
+
+    context "when there is no associated User" do
+      let(:record) { described_class.create(creation_params.except(:user)) }
+
+      it "will fail with an appropriate error message" do
+        expect(record.errors.full_messages).to include("User must exist")
       end
     end
 

@@ -1,6 +1,8 @@
 class Ranking < ApplicationRecord
   belongs_to :book
-  validates :book, uniqueness: true
+  belongs_to :user
+
+  validates :book, uniqueness: {scope: :user}
 
   validates :position,
     presence: true,

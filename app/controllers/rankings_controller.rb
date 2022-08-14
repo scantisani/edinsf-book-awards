@@ -19,7 +19,7 @@ class RankingsController < ApplicationController
   end
 
   def create_or_update_rankings!
-    rankings = Ranking.where(book_id: ordered_book_ids)
+    rankings = Ranking.where(book_id: ordered_book_ids, user: current_user)
 
     if rankings.none?
       create_new_rankings!
@@ -34,7 +34,7 @@ class RankingsController < ApplicationController
 
   def new_ranking_attributes
     ordered_book_ids.map.with_index do |book_id, index|
-      {book_id: book_id, position: index}
+      {book_id: book_id, user_id: current_user.id, position: index}
     end
   end
 
@@ -46,8 +46,8 @@ class RankingsController < ApplicationController
   end
 
   def as_hashes(rankings)
-    rankings.pluck(:id, :book_id, :position)
-            .to_h { |id, book_id, position| [id, {book_id: book_id, position: position}] }
+    rankings.pluck(:id, :book_id, :user_id, :position)
+            .to_h { |id, book_id, user_id, position| [id, {book_id: book_id, user_id: user_id, position: position}] }
   end
 
   def extract_position_updates(ranking_hashes)

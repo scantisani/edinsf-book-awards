@@ -10,4 +10,8 @@ class ApplicationController < ActionController::Base
   def logged_out?
     session[:user_id].nil?
   end
+
+  def current_user
+    User.find(session[:user_id])
+  end
 end

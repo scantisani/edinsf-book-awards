@@ -43,7 +43,11 @@ RSpec.describe RankingsController, type: :request do
       let(:order) { [book_one.id, book_two.id, book_three.id] }
 
       before do
-        Ranking.create!([{book: book_one, position: 1}, {book: book_two, position: 0}, {book: book_three, position: 2}])
+        Ranking.create!([
+          {user: current_user, book: book_one, position: 1},
+          {user: current_user, book: book_two, position: 0},
+          {user: current_user, book: book_three, position: 2}
+        ])
       end
 
       it "overwrites them" do

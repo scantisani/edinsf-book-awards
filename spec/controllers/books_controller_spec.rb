@@ -34,8 +34,8 @@ RSpec.describe BooksController, type: :request do
 
     context "when the books have associated rankings" do
       before do
-        book_one.rankings.create(position: 1)
-        book_two.rankings.create(position: 0)
+        book_one.rankings.create(position: 1, user: current_user)
+        book_two.rankings.create(position: 0, user: current_user)
       end
 
       it "orders the books by their ranking" do
