@@ -59,11 +59,11 @@ RSpec.describe User, type: :model do
   end
 
   describe "deletion" do
-    let(:book) { Book.create(title: "The Left Hand of Darkness", author: "Ursula K. Le Guin", published_at: Time.utc(1969), read_at: Time.utc(2018, 3), chosen_by: "Susan") }
+    let(:book) { create(:book) }
     let(:user) { described_class.create(creation_params) }
 
     it "removes all associated rankings" do
-      ranking = user.rankings.create(book: book, position: 0)
+      ranking = user.rankings.create!(book: book, position: 0)
 
       user.destroy
       expect(ranking).not_to be_persisted

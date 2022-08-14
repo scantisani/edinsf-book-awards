@@ -88,7 +88,7 @@ RSpec.describe Book, type: :model do
   describe "deletion" do
     it "removes all associated rankings" do
       record = described_class.create(creation_params)
-      ranking = record.rankings.create(position: 0)
+      ranking = record.rankings.create!(position: 0, user: create(:user))
 
       record.destroy
       expect(ranking).not_to be_persisted

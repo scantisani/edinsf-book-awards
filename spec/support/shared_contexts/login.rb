@@ -1,5 +1,5 @@
 RSpec.shared_context "when logged in" do
-  let!(:current_user) { User.create(name: "Scott") }
+  let!(:current_user) { User.create(name: Faker::Name.first_name) }
   before { get user_path(current_user.uuid) }
 end
 

@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe Ranking, type: :model do
   describe "creation" do
-    let!(:book) { Book.create(title: "The Monk", author: "Matthew Lewis", published_at: Time.utc(1796), read_at: Time.utc(2021, 1), chosen_by: "Amy") }
-    let!(:user) { User.create(name: "Scott") }
+    let!(:book) { create(:book) }
+    let!(:user) { create(:user) }
 
     let(:creation_params) { {user: user, book: book, position: 1} }
 

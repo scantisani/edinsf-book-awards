@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe UsersController, type: :request do
-  let!(:user) { User.create(name: "Scott") }
+  let!(:user) { create(:user) }
 
   describe "#show" do
     context "when the UUID is valid" do
@@ -17,7 +17,7 @@ RSpec.describe UsersController, type: :request do
     end
 
     context "when the user is already logged in" do
-      let!(:user_two) { User.create(name: "Tony") }
+      let!(:user_two) { create(:user) }
 
       before { get user_path(user.uuid) }
 

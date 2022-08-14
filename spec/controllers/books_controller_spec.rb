@@ -5,8 +5,8 @@ RSpec.describe BooksController, type: :request do
   describe "#index" do
     include_context "when logged in"
 
-    let!(:book_one) { Book.create(title: "The Monk", author: "Matthew Lewis", published_at: Time.utc(1796), read_at: Time.utc(2021, 1), chosen_by: "Amy") }
-    let!(:book_two) { Book.create(title: "Plum Rains", author: "Andromeda Romano-Lax", published_at: Time.utc(2018), read_at: Time.utc(2021, 2), chosen_by: "Scott") }
+    let!(:book_one) { create(:book) }
+    let!(:book_two) { create(:book) }
 
     let(:expected_response) do
       [
@@ -48,7 +48,7 @@ RSpec.describe BooksController, type: :request do
       end
 
       context "with a different user" do
-        let(:user) { User.create(name: "Tony") }
+        let(:user) { create(:user) }
 
         it "ignores that other user's rankings" do
           get books_path

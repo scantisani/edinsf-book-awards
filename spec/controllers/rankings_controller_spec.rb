@@ -5,8 +5,8 @@ RSpec.describe RankingsController, type: :request do
   describe "#create" do
     include_context "when logged in"
 
-    let!(:book_one) { Book.create(title: "The Monk", author: "Matthew Lewis", published_at: Time.utc(1796), read_at: Time.utc(2021, 1), chosen_by: "Amy") }
-    let!(:book_two) { Book.create(title: "Plum Rains", author: "Andromeda Romano-Lax", published_at: Time.utc(2018), read_at: Time.utc(2021, 2), chosen_by: "Scott") }
+    let!(:book_one) { create(:book) }
+    let!(:book_two) { create(:book) }
     let(:order) { [book_one.id, book_two.id] }
 
     let(:make_request!) do
@@ -39,7 +39,7 @@ RSpec.describe RankingsController, type: :request do
     end
 
     context "when Rankings already exist for those books" do
-      let(:book_three) { Book.create(title: "A Memory Called Empire", author: "Arkady Martine", published_at: Time.utc(2019), read_at: Time.utc(2021, 3), chosen_by: "Bruno") }
+      let(:book_three) { create(:book) }
       let(:order) { [book_one.id, book_two.id, book_three.id] }
 
       context "when they belong to the same user" do
@@ -61,7 +61,7 @@ RSpec.describe RankingsController, type: :request do
       end
 
       context "when they belong to a different user" do
-        let!(:other_user) { User.create(name: "Tony") }
+        let!(:other_user) { create(:user) }
 
         before do
           Ranking.create!([
