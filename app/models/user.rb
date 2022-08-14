@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :rankings, dependent: :destroy
+
   validates :uuid,
     presence: true,
     uniqueness: true,
