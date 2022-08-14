@@ -33,9 +33,11 @@ RSpec.describe BooksController, type: :request do
     end
 
     context "when the books have associated rankings" do
+      let(:user) { current_user }
+
       before do
-        book_one.rankings.create(position: 1, user: current_user)
-        book_two.rankings.create(position: 0, user: current_user)
+        book_one.rankings.create(position: 1, user: user)
+        book_two.rankings.create(position: 0, user: user)
       end
 
       it "orders the books by their ranking" do
@@ -43,6 +45,17 @@ RSpec.describe BooksController, type: :request do
 
         ordered_ids = JSON.parse(response.body).pluck("id")
         expect(ordered_ids).to eq([book_two.id, book_one.id])
+      end
+
+      context "with a different user" do
+        let(:user) { User.create(name: "Tony") }
+
+        it "ignores that other user's rankings" do
+          get books_path
+
+          ordered_ids = JSON.parse(response.body).pluck("id")
+          expect(ordered_ids).to eq([book_one.id, book_two.id])
+        end
       end
     end
 

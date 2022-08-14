@@ -42,20 +42,50 @@ RSpec.describe RankingsController, type: :request do
       let(:book_three) { Book.create(title: "A Memory Called Empire", author: "Arkady Martine", published_at: Time.utc(2019), read_at: Time.utc(2021, 3), chosen_by: "Bruno") }
       let(:order) { [book_one.id, book_two.id, book_three.id] }
 
-      before do
-        Ranking.create!([
-          {user: current_user, book: book_one, position: 1},
-          {user: current_user, book: book_two, position: 0},
-          {user: current_user, book: book_three, position: 2}
-        ])
+      context "when they belong to the same user" do
+        before do
+          Ranking.create!([
+            {user: current_user, book: book_one, position: 1},
+            {user: current_user, book: book_two, position: 0},
+            {user: current_user, book: book_three, position: 2}
+          ])
+        end
+
+        it "overwrites them" do
+          expect { make_request! }.not_to change(Ranking, :count)
+
+          expect(Ranking.where(user: current_user, position: 0, book: book_one)).to exist
+          expect(Ranking.where(user: current_user, position: 1, book: book_two)).to exist
+          expect(Ranking.where(user: current_user, position: 2, book: book_three)).to exist
+        end
       end
 
-      it "overwrites them" do
-        expect { make_request! }.not_to change(Ranking, :count)
+      context "when they belong to a different user" do
+        let!(:other_user) { User.create(name: "Tony") }
 
-        expect(Ranking.where(position: 0, book: book_one)).to exist
-        expect(Ranking.where(position: 1, book: book_two)).to exist
-        expect(Ranking.where(position: 2, book: book_three)).to exist
+        before do
+          Ranking.create!([
+            {user: other_user, book: book_one, position: 1},
+            {user: other_user, book: book_two, position: 0},
+            {user: other_user, book: book_three, position: 2}
+          ])
+        end
+
+        it "doesn't overwrite them" do
+          make_request!
+
+          expect(Ranking.where(user: other_user, position: 1, book: book_one)).to exist
+          expect(Ranking.where(user: other_user, position: 0, book: book_two)).to exist
+          expect(Ranking.where(user: other_user, position: 2, book: book_three)).to exist
+        end
+
+        it "creates new rankings" do
+          expect { make_request! }.to change(Ranking, :count).by(3)
+
+          expect(Ranking.where(user: current_user, position: 0, book: book_one)).to exist
+          expect(Ranking.where(user: current_user, position: 1, book: book_two)).to exist
+          expect(Ranking.where(user: current_user, position: 2, book: book_three)).to exist
+        end
       end
     end
 

@@ -1,9 +1,14 @@
 class BooksController < ApplicationController
   def index
-    ordered_books = Book.left_joins(:rankings)
-                        .select(:id, :title, :author)
-                        .order(Ranking.arel_table[:position].asc, :read_at)
+    render json: ordered_books.select(:id, :title, :author).to_json
+  end
 
-    render json: ordered_books.to_json
+  private
+
+  def ordered_books
+    user_ranked_books = Book.joins(:rankings).where(rankings: {user: current_user})
+    return Book.order(:read_at) if user_ranked_books.none?
+
+    user_ranked_books.order(Ranking.arel_table[:position].asc)
   end
 end
