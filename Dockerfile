@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:experimental
-ARG RUBY_VERSION=2.7.3
+ARG RUBY_VERSION=3.1.2
 ARG VARIANT=jemalloc-slim
 FROM quay.io/evl.ms/fullstaq-ruby:${RUBY_VERSION}-${VARIANT} as base
 
@@ -33,7 +33,7 @@ RUN volta install node@${NODE_VERSION} && volta install yarn
 
 FROM base as build_deps
 
-ARG DEV_PACKAGES="git build-essential libpq-dev wget vim curl gzip xz-utils libsqlite3-dev"
+ARG DEV_PACKAGES="git build-essential libpq-dev wget vim curl gzip xz-utils"
 ENV DEV_PACKAGES ${DEV_PACKAGES}
 
 RUN --mount=type=cache,id=dev-apt-cache,sharing=locked,target=/var/cache/apt \
@@ -54,13 +54,7 @@ FROM build_deps as node_modules
 COPY package*json ./
 COPY yarn.* ./
 
-RUN if [ -f "yarn.lock" ]; then \
-    yarn install; \
-    elif [ -f "package-lock.json" ]; then \
-    npm install; \
-    else \
-    mkdir node_modules; \
-    fi
+RUN yarn install
 
 FROM base
 
@@ -81,10 +75,10 @@ ENV SECRET_KEY_BASE 1
 
 COPY . .
 
-RUN bin/rails fly:build
+RUN bin/rails assets:precompile
 
 ENV PORT 8080
 
-ARG SERVER_COMMAND="bin/rails fly:server"
+ARG SERVER_COMMAND="bundle exec puma -C config/puma.rb"
 ENV SERVER_COMMAND ${SERVER_COMMAND}
 CMD ${SERVER_COMMAND}
