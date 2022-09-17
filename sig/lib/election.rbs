@@ -1,0 +1,21 @@
+class Election[T]
+  def initialize: (Array[T] candidates, Array[Array[T]] ballots) -> void
+
+  attr_reader path_strengths: Array[Array[T]]
+
+  def elect: () -> Array[T]
+
+  def initialize_matrices: () -> Array[Array[T]]
+  def calculate_strongest_paths: () -> void
+  def calculate_winners: () -> Array[T]
+
+  private
+
+  attr_writer path_strengths (): Array[Array[T]]
+
+  attr_accessor candidates (): Array[T]
+  attr_accessor ballots (): Array[Array[T]]
+
+  def num_candidates: () -> Integer
+  def num_ballots_preferring: (T, T) -> Integer
+end
