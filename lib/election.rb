@@ -3,41 +3,41 @@ class Election
     @candidates = candidates
     @ballots = ballots
 
-    @path_strengths = Array.new(num_candidates) { Array.new(num_candidates) }
+    @preference_graph = PreferenceGraph.empty
   end
 
-  attr_reader :path_strengths
+  attr_reader :preference_graph
 
   def elect
-    initialize_matrices
+    set_initial_paths
     calculate_strongest_paths
     calculate_winners
     # calculate single winner
     # calculate ranking
   end
 
-  def initialize_matrices
-    candidates.each.with_index do |candidate_one, i|
-      candidates.each.with_index do |candidate_two, j|
-        next if i == j
+  def set_initial_paths
+    candidates.each do |candidate_one|
+      candidates.each do |candidate_two|
+        next if candidate_one == candidate_two
 
-        path_strengths[i][j] = num_ballots_preferring(candidate_one, candidate_two)
+        preference_graph.set_path(candidate_one, candidate_two, strength: num_ballots_preferring(candidate_one, candidate_two))
       end
     end
   end
 
   def calculate_strongest_paths
-    num_candidates.times do |middle|
-      num_candidates.times do |start|
+    candidates.each do |middle|
+      candidates.each do |start|
         next if middle == start
 
-        num_candidates.times do |finish|
+        candidates.each do |finish|
           next if middle == finish || start == finish
 
-          strongest_alternative = [path_strengths[start][middle], path_strengths[middle][finish]].min
+          strongest_alternative = [preference_graph.path(start, middle), preference_graph.path(middle, finish)].min
 
-          if path_strengths[start][finish] < strongest_alternative
-            path_strengths[start][finish] = strongest_alternative
+          if preference_graph.path(start, finish) < strongest_alternative
+            preference_graph.set_path(start, finish, strength: strongest_alternative)
           end
         end
       end
@@ -48,14 +48,15 @@ class Election
     winners = []
     o_pairs = []
 
-    num_candidates.times do |i|
-      winners << candidates[i]
-      num_candidates.times do |j|
-        next if i == j
+    candidates.each do |candidate_one|
+      winners << candidate_one
 
-        if path_strengths[j][i] > path_strengths[i][j]
-          o_pairs << [j, i]
-          winners.delete(candidates[i])
+      candidates.each do |candidate_two|
+        next if candidate_one == candidate_two
+
+        if preference_graph.path(candidate_two, candidate_one) > preference_graph.path(candidate_one, candidate_two)
+          o_pairs << [candidate_two, candidate_one]
+          winners.delete(candidate_one)
         end
       end
     end
@@ -65,7 +66,7 @@ class Election
 
   private
 
-  attr_writer :path_strengths
+  attr_writer :preference_graph
   attr_accessor :candidates, :ballots
 
   def num_candidates

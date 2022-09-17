@@ -1,0 +1,15 @@
+class PreferenceGraph[T]
+  def empty: () -> PreferenceGraph[T]
+  def with_paths: (Hash[T, Hash[T, Integer]]) -> PreferenceGraph[T]
+
+  def path: (T, T) -> Integer
+  def set_path: (T, T, strength: Integer) -> void
+
+  @paths: Hash[T, Hash[T, Integer]]
+
+  private
+
+  def initialize: (?Hash[T, Hash[T, Integer]]) -> void
+
+  attr_accessor paths: Hash[T, Hash[T, Integer]]
+end

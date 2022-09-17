@@ -5,19 +5,15 @@ RSpec.describe Election do
   let(:candidates) {}
   let(:ballots) {}
 
-  let(:strength_matrix) {}
-
-  describe "#initialize_matrices" do
-    before { election.initialize_matrices }
+  describe "#set_initial_paths" do
+    before { election.set_initial_paths }
 
     context "with no ballots" do
       let(:candidates) { [] }
       let(:ballots) { [] }
 
-      let(:strength_matrix) { [] }
-
-      it "creates an empty path strengths matrix" do
-        expect(election.path_strengths).to eq(strength_matrix)
+      it "creates an empty preference graph" do
+        expect(election.preference_graph).to eq(PreferenceGraph.empty)
       end
     end
 
@@ -25,10 +21,8 @@ RSpec.describe Election do
       let(:candidates) { %i[a] }
       let(:ballots) { [%i[a]] }
 
-      let(:strength_matrix) { [[nil]] }
-
-      it "creates a path strength matrix with one nil cell" do
-        expect(election.path_strengths).to eq(strength_matrix)
+      it "creates an empty preference graph" do
+        expect(election.preference_graph).to eq(PreferenceGraph.empty)
       end
     end
 
@@ -36,15 +30,17 @@ RSpec.describe Election do
       let(:candidates) { %i[a b] }
       let(:ballots) { [%i[a b], %i[a b], %i[b a]] }
 
-      let(:strength_matrix) do
-        [
-          [nil, 2],
-          [1, nil]
-        ]
+      let(:graph) do
+        PreferenceGraph.with_paths(
+          {
+            a: {b: 2},
+            b: {a: 1}
+          }
+        )
       end
 
       it "returns a 2-dimensional path strength matrix with initial strengths" do
-        expect(election.path_strengths).to eq(strength_matrix)
+        expect(election.preference_graph).to eq(graph)
       end
     end
 
@@ -58,24 +54,26 @@ RSpec.describe Election do
           [%i[d c b a]] * 3
       end
 
-      let(:strength_matrix) do
-        [
-          [nil, 8, 14, 10],
-          [13, nil, 6, 2],
-          [7, 15, nil, 12],
-          [11, 19, 9, nil]
-        ]
+      let(:graph) do
+        PreferenceGraph.with_paths(
+          {
+            a: {b: 8, c: 14, d: 10},
+            b: {a: 13, c: 6, d: 2},
+            c: {a: 7, b: 15, d: 12},
+            d: {a: 11, b: 19, c: 9}
+          }
+        )
       end
 
       it "returns the initial path strength matrix for Example 1" do
-        expect(election.path_strengths).to eq(strength_matrix)
+        expect(election.preference_graph).to eq(graph)
       end
     end
   end
 
   describe "#calculate_strongest_paths" do
     before do
-      election.initialize_matrices
+      election.set_initial_paths
       election.calculate_strongest_paths
     end
 
@@ -89,24 +87,26 @@ RSpec.describe Election do
           [%i[d c b a]] * 3
       end
 
-      let(:strength_matrix) do
-        [
-          [nil, 14, 14, 12],
-          [13, nil, 13, 12],
-          [13, 15, nil, 12],
-          [13, 19, 13, nil]
-        ]
+      let(:graph) do
+        PreferenceGraph.with_paths(
+          {
+            a: {b: 14, c: 14, d: 12},
+            b: {a: 13, c: 13, d: 12},
+            c: {a: 13, b: 15, d: 12},
+            d: {a: 13, b: 19, c: 13}
+          }
+        )
       end
 
-      it "returns the final strength matrix for Example 1" do
-        expect(election.path_strengths).to eq(strength_matrix)
+      it "returns the final preference graph for Example 1" do
+        expect(election.preference_graph).to eq(graph)
       end
     end
   end
 
   describe "#calculate_winners" do
     before do
-      election.initialize_matrices
+      election.set_initial_paths
       election.calculate_strongest_paths
     end
 
