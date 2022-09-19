@@ -7,6 +7,13 @@ module Ranker
       @o_pairs = []
     end
 
+    def rank
+      set_initial_paths
+      calculate_strongest_paths
+      calculate_winners
+      determine_ranking
+    end
+
     def set_initial_paths
       candidates.each do |candidate_one|
         candidates.each do |candidate_two|

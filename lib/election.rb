@@ -5,10 +5,7 @@ class Election
   end
 
   def elect
-    ranker.tap(&:set_initial_paths)
-          .tap(&:calculate_strongest_paths)
-          .tap(&:calculate_winners)
-          .then(&:determine_ranking)
+    ranker.rank
   end
 
   private

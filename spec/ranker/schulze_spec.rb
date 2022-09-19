@@ -128,4 +128,14 @@ RSpec.describe Ranker::Schulze do
       end
     end
   end
+
+  describe "#rank" do
+    context "with the votes in Example 1 from the Schulze paper" do
+      include_context "with ballots from Example 1"
+
+      it "returns the ranking for Example 1" do
+        expect(ranker.rank).to eq([:d, :a, :c, :b])
+      end
+    end
+  end
 end
