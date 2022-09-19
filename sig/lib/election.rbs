@@ -1,14 +1,7 @@
 class Election[T]
-  def initialize: (Array[Array[T]] ballots) -> void
-
-  attr_reader path_strengths: PreferenceGraph[T]
+  def initialize: (ballots: Array[Array[T]] ballots, ranker: Ranker::Schulze[T]) -> void
 
   def elect: () -> Array[T]
-
-  def initialize_matrices: () -> void
-  def calculate_strongest_paths: () -> void
-  def calculate_winners: () -> Array[T]
-  def determine_ranking: () -> Array[T]
 
   private
 

@@ -1,92 +1,17 @@
 class Election
-  def initialize(ballots)
+  def initialize(ballots:, ranker: Ranker::Schulze.new(ballots: ballots))
     @ballots = ballots
-
-    @preference_graph = PreferenceGraph.empty
-    @o_pairs = []
+    @ranker = ranker
   end
-
-  attr_reader :preference_graph
 
   def elect
-    set_initial_paths
-    calculate_strongest_paths
-    calculate_winners
-    determine_ranking
-  end
-
-  def set_initial_paths
-    candidates.each do |candidate_one|
-      candidates.each do |candidate_two|
-        next if candidate_one == candidate_two
-
-        preference_graph.set_path(candidate_one, candidate_two, strength: num_ballots_preferring(candidate_one, candidate_two))
-      end
-    end
-  end
-
-  def calculate_strongest_paths
-    candidates.each do |middle|
-      candidates.each do |start|
-        next if middle == start
-
-        candidates.each do |finish|
-          next if middle == finish || start == finish
-
-          strongest_alternative = [preference_graph.path(start, middle), preference_graph.path(middle, finish)].min
-
-          if preference_graph.path(start, finish) < strongest_alternative
-            preference_graph.set_path(start, finish, strength: strongest_alternative)
-          end
-        end
-      end
-    end
-  end
-
-  def calculate_winners
-    winners = []
-    self.o_pairs = []
-
-    candidates.each do |candidate_one|
-      winners << candidate_one
-
-      candidates.each do |candidate_two|
-        next if candidate_one == candidate_two
-
-        if preference_graph.path(candidate_two, candidate_one) > preference_graph.path(candidate_one, candidate_two)
-          o_pairs << [candidate_two, candidate_one]
-          winners.delete(candidate_one)
-        end
-      end
-    end
-
-    winners
-  end
-
-  def determine_ranking
-    candidates.sort do |a, b|
-      pair = o_pairs.find { |pair| pair == [a, b] || pair == [b, a] }
-
-      pair.index(a) <=> pair.index(b)
-    end
+    ranker.tap(&:set_initial_paths)
+          .tap(&:calculate_strongest_paths)
+          .tap(&:calculate_winners)
+          .then(&:determine_ranking)
   end
 
   private
 
-  def candidates
-    @candidates ||= ballots.empty? ? [] : ballots.reduce(&:union)
-  end
-
-  attr_writer :preference_graph
-  attr_accessor :ballots
-  attr_accessor :o_pairs
-
-  def num_candidates
-    candidates.count
-  end
-
-  # @return [Integer] the number of ballots that rank +preferred_candidate+ higher than +compared_candidate+
-  def num_ballots_preferring(preferred_candidate, compared_candidate)
-    ballots.count { |ballot| ballot.index(preferred_candidate) < ballot.index(compared_candidate) }
-  end
+  attr_reader :ranker
 end
