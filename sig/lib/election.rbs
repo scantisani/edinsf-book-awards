@@ -1,5 +1,5 @@
 class Election[T]
-  def initialize: (Array[T] candidates, Array[Array[T]] ballots) -> void
+  def initialize: (Array[Array[T]] ballots) -> void
 
   attr_reader path_strengths: PreferenceGraph[T]
 
@@ -13,10 +13,9 @@ class Election[T]
   private
 
   attr_writer path_strengths (): Array[Array[T]]
-
-  attr_accessor candidates (): Array[T]
   attr_accessor ballots (): Array[Array[T]]
 
+  def candidates: () -> Array[T]
   def num_candidates: () -> Integer
   def num_ballots_preferring: (T, T) -> Integer
 end

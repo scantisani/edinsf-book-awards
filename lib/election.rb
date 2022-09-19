@@ -1,6 +1,5 @@
 class Election
-  def initialize(candidates, ballots)
-    @candidates = candidates
+  def initialize(ballots)
     @ballots = ballots
 
     @preference_graph = PreferenceGraph.empty
@@ -74,8 +73,12 @@ class Election
 
   private
 
+  def candidates
+    @candidates ||= ballots.empty? ? [] : ballots.reduce(&:union)
+  end
+
   attr_writer :preference_graph
-  attr_accessor :candidates, :ballots
+  attr_accessor :ballots
   attr_accessor :o_pairs
 
   def num_candidates

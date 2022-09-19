@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Election do
-  let(:election) { described_class.new(candidates, ballots) }
+  let(:election) { described_class.new(ballots) }
   let(:candidates) {}
   let(:ballots) {}
 
