@@ -4,6 +4,7 @@ class Election
     @ballots = ballots
 
     @preference_graph = PreferenceGraph.empty
+    @o_pairs = []
   end
 
   attr_reader :preference_graph
@@ -12,8 +13,7 @@ class Election
     set_initial_paths
     calculate_strongest_paths
     calculate_winners
-    # calculate single winner
-    # calculate ranking
+    determine_ranking
   end
 
   def set_initial_paths
@@ -46,7 +46,7 @@ class Election
 
   def calculate_winners
     winners = []
-    o_pairs = []
+    self.o_pairs = []
 
     candidates.each do |candidate_one|
       winners << candidate_one
@@ -64,10 +64,19 @@ class Election
     winners
   end
 
+  def determine_ranking
+    candidates.sort do |a, b|
+      pair = o_pairs.find { |pair| pair == [a, b] || pair == [b, a] }
+
+      pair.index(a) <=> pair.index(b)
+    end
+  end
+
   private
 
   attr_writer :preference_graph
   attr_accessor :candidates, :ballots
+  attr_accessor :o_pairs
 
   def num_candidates
     candidates.count

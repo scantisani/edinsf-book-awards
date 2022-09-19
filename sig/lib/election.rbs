@@ -8,6 +8,7 @@ class Election[T]
   def initialize_matrices: () -> void
   def calculate_strongest_paths: () -> void
   def calculate_winners: () -> Array[T]
+  def determine_ranking: () -> Array[T]
 
   private
 
