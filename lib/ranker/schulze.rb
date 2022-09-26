@@ -4,8 +4,12 @@ module Ranker
       @ballots = ballots
       @graph = preference_graph
 
+      @winners = []
       @o_pairs = []
+      @ranking = []
     end
+
+    attr_reader :winners, :ranking
 
     def rank
       set_initial_paths
@@ -13,6 +17,12 @@ module Ranker
       calculate_winners
       determine_ranking
     end
+
+    private
+
+    attr_reader :ballots
+    attr_writer :winners, :ranking
+    attr_accessor :o_pairs, :graph
 
     def set_initial_paths
       candidates.each do |candidate_one|
@@ -43,9 +53,6 @@ module Ranker
     end
 
     def calculate_winners
-      winners = []
-      self.o_pairs = []
-
       candidates.each do |candidate_one|
         winners << candidate_one
 
@@ -58,22 +65,15 @@ module Ranker
           end
         end
       end
-
-      winners
     end
 
     def determine_ranking
-      candidates.sort do |a, b|
+      self.ranking = candidates.sort do |a, b|
         pair = o_pairs.find { |pair| pair == [a, b] || pair == [b, a] }
 
         pair.index(a) <=> pair.index(b)
       end
     end
-
-    private
-
-    attr_reader :ballots
-    attr_accessor :o_pairs, :graph
 
     def candidates
       @candidates ||= ballots.empty? ? [] : ballots.reduce(&:union)

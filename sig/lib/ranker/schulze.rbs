@@ -1,20 +1,24 @@
 module Ranker
   class Schulze[T]
-    def initialize: (ballots: Array[T] ballots, ?preference_graph: PreferenceGraph[T] preference_graph) -> void
+    def initialize: (ballots: Array[T] ballots, ?preference_graph: PreferenceGraph[T] preference_graph) -> Ranker::Schulze[T]
+
+    attr_reader winners: Array[T]
+    attr_reader ranking: Array[T]
 
     def rank: () -> Array[T]
-
-    def set_initial_paths: () -> void
-    def calculate_strongest_paths: () -> void
-    def calculate_winners: () -> void
-    def determine_ranking: () -> Array[T]
 
     private
 
     attr_reader ballots: Array[T]
     attr_writer winners: Array[T]
+    attr_writer ranking: Array[T]
     attr_accessor o_pairs: Array[Array[T]]
     attr_accessor graph: PreferenceGraph[T]
+
+    def set_initial_paths: () -> void
+    def calculate_strongest_paths: () -> void
+    def calculate_winners: () -> void
+    def determine_ranking: () -> Array[T]
 
     def candidates: () -> Array[T]
 

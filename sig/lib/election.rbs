@@ -1,14 +1,12 @@
 class Election[T]
-  def initialize: (ballots: Array[Array[T]] ballots, ranker: Ranker::Schulze[T]) -> void
+  def initialize: (ballots: Array[Array[T]] ballots, ?ranker: Ranker::Schulze[T]) -> Election[T]
 
-  def elect: () -> Array[T]
+  def elect: () -> void
+
+  attr_reader winners (): Array[T]
+  attr_reader ranking (): Array[T]
 
   private
 
-  attr_writer path_strengths (): Array[Array[T]]
-  attr_accessor ballots (): Array[Array[T]]
-
-  def candidates: () -> Array[T]
-  def num_candidates: () -> Integer
-  def num_ballots_preferring: (T, T) -> Integer
+  attr_reader ranker (): Ranker::Schulze[T]
 end

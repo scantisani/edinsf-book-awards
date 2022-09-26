@@ -5,6 +5,8 @@ RSpec.describe Election do
   let(:ballots) {}
 
   describe "#elect" do
+    before { election.elect }
+
     context "with the votes in Example 1 from the Schulze paper" do
       let(:ballots) do
         [%i[a c d b]] * 8 +
@@ -14,8 +16,12 @@ RSpec.describe Election do
           [%i[d c b a]] * 3
       end
 
-      it "returns the ranking for Example 1" do
-        expect(election.elect).to eq([:d, :a, :c, :b])
+      it "returns the correct winners for Example 1" do
+        expect(election.winners).to eq([:d])
+      end
+
+      it "returns the correct ranking for Example 1" do
+        expect(election.ranking).to eq([:d, :a, :c, :b])
       end
     end
   end

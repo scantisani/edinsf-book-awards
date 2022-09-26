@@ -4,6 +4,8 @@ class Election
     @ranker = ranker
   end
 
+  delegate :winners, :ranking, to: :ranker
+
   def elect
     ranker.rank
   end

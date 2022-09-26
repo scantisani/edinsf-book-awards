@@ -6,24 +6,22 @@ RSpec.describe Ranker::Schulze do
   let(:graph) { PreferenceGraph.empty }
   let(:ballots) {}
 
-  shared_context "with ballots from Example 1" do
-    let(:ballots) do
-      [%i[a c d b]] * 8 +
-        [%i[b a d c]] * 2 +
-        [%i[c d b a]] * 4 +
-        [%i[d b a c]] * 4 +
-        [%i[d c b a]] * 3
-    end
-  end
-
-  describe "#set_initial_paths" do
-    before { ranker.set_initial_paths }
+  describe "#rank" do
+    before { ranker.rank }
 
     context "with no ballots" do
       let(:ballots) { [] }
 
       it "creates an empty preference graph" do
         expect(graph).to eq(PreferenceGraph.empty)
+      end
+
+      it "returns an empty ranking" do
+        expect(ranker.ranking).to be_empty
+      end
+
+      it "returns no winners" do
+        expect(ranker.winners).to be_empty
       end
     end
 
@@ -32,6 +30,14 @@ RSpec.describe Ranker::Schulze do
 
       it "creates an empty preference graph" do
         expect(graph).to eq(PreferenceGraph.empty)
+      end
+
+      it "returns that item as the entire ranking" do
+        expect(ranker.ranking).to eq(%i[a])
+      end
+
+      it "returns that item as the winner" do
+        expect(ranker.winners).to eq(%i[a])
       end
     end
 
@@ -47,39 +53,27 @@ RSpec.describe Ranker::Schulze do
         )
       end
 
-      it "returns a 2-dimensional path strength matrix with initial strengths" do
+      it "creates a preference graph with two nodes" do
         expect(graph).to eq(expected_graph)
+      end
+
+      it "ranks the items according to the number of votes" do
+        expect(ranker.ranking).to eq(%i[a b])
+      end
+
+      it "returns the item with the most votes as the winner" do
+        expect(ranker.winners).to eq(%i[a])
       end
     end
 
     context "with the votes in Example 1 from the Schulze paper" do
-      include_context "with ballots from Example 1"
-
-      let(:expected_graph) do
-        PreferenceGraph.with_paths(
-          {
-            a: {b: 8, c: 14, d: 10},
-            b: {a: 13, c: 6, d: 2},
-            c: {a: 7, b: 15, d: 12},
-            d: {a: 11, b: 19, c: 9}
-          }
-        )
+      let(:ballots) do
+        [%i[a c d b]] * 8 +
+          [%i[b a d c]] * 2 +
+          [%i[c d b a]] * 4 +
+          [%i[d b a c]] * 4 +
+          [%i[d c b a]] * 3
       end
-
-      it "returns the initial path strength matrix for Example 1" do
-        expect(graph).to eq(expected_graph)
-      end
-    end
-  end
-
-  describe "#calculate_strongest_paths" do
-    before do
-      ranker.set_initial_paths
-      ranker.calculate_strongest_paths
-    end
-
-    context "with the votes in Example 1 from the Schulze paper" do
-      include_context "with ballots from Example 1"
 
       let(:expected_graph) do
         PreferenceGraph.with_paths(
@@ -92,49 +86,32 @@ RSpec.describe Ranker::Schulze do
         )
       end
 
-      it "returns the final preference graph for Example 1" do
+      it "creates the final preference graph for Example 1" do
         expect(graph).to eq(expected_graph)
       end
-    end
-  end
 
-  describe "#calculate_winners" do
-    before do
-      ranker.set_initial_paths
-      ranker.calculate_strongest_paths
-    end
+      it "returns the ranking for Example 1" do
+        expect(ranker.ranking).to eq([:d, :a, :c, :b])
+      end
 
-    context "with the votes in Example 1 from the Schulze paper" do
-      include_context "with ballots from Example 1"
-
-      it "returns the winner for Example 1" do
-        expect(ranker.calculate_winners).to eq([:d])
+      it "returns the winners for Example 1" do
+        expect(ranker.winners).to eq([:d])
       end
     end
   end
 
-  describe "#determine_ranking" do
-    before do
-      ranker.set_initial_paths
-      ranker.calculate_strongest_paths
-      ranker.calculate_winners
-    end
-
-    context "with the votes in Example 1 from the Schulze paper" do
-      include_context "with ballots from Example 1"
-
-      it "returns the ranking for Example 1" do
-        expect(ranker.determine_ranking).to eq([:d, :a, :c, :b])
+  describe "#winners" do
+    context "when #rank has not been called yet" do
+      it "returns an empty array" do
+        expect(ranker.winners).to be_empty
       end
     end
   end
 
-  describe "#rank" do
-    context "with the votes in Example 1 from the Schulze paper" do
-      include_context "with ballots from Example 1"
-
-      it "returns the ranking for Example 1" do
-        expect(ranker.rank).to eq([:d, :a, :c, :b])
+  describe "#ranking" do
+    context "when #rank has not been called yet" do
+      it "returns an empty array" do
+        expect(ranker.ranking).to be_empty
       end
     end
   end
