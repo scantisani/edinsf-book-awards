@@ -98,6 +98,36 @@ RSpec.describe Ranker::Schulze do
         expect(ranker.winners).to eq([:d])
       end
     end
+
+    context "with the votes in Example 13 from the Schulze paper" do
+      let(:ballots) do
+        [%i[a b c]] * 2 +
+          [%i[b c a]] * 2 +
+          [%i[c a b]]
+      end
+
+      let(:expected_graph) do
+        PreferenceGraph.with_paths(
+          {
+            a: {b: 3, c: 3},
+            b: {a: 3, c: 4},
+            c: {a: 3, b: 3}
+          }
+        )
+      end
+
+      it "creates the final preference graph for Example 13" do
+        expect(graph).to eq(expected_graph)
+      end
+
+      it "returns the ranking for Example 13" do
+        expect(ranker.ranking).to eq([:a, :b, :c])
+      end
+
+      it "returns the winners for Example 13" do
+        expect(ranker.winners).to eq([:a, :b])
+      end
+    end
   end
 
   describe "#winners" do

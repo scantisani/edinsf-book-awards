@@ -69,7 +69,8 @@ module Ranker
 
     def determine_ranking
       self.ranking = candidates.sort do |a, b|
-        pair = o_pairs.find { |pair| pair == [a, b] || pair == [b, a] }
+        pair = o_pairs.find { |o_pair| o_pair == [a, b] || o_pair == [b, a] }
+        next 0 if pair.nil?
 
         pair.index(a) <=> pair.index(b)
       end
