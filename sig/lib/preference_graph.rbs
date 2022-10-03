@@ -1,6 +1,6 @@
 class PreferenceGraph[T]
-  def empty: () -> PreferenceGraph[T]
-  def with_paths: (Hash[T, Hash[T, Integer]]) -> PreferenceGraph[T]
+  def self.empty: [T]() -> PreferenceGraph[T]
+  def self.with_paths: [T](Hash[T, Hash[T, Integer]]) -> PreferenceGraph[T]
 
   def path: (T, T) -> Integer
   def set_path: (T, T, strength: Integer) -> void
