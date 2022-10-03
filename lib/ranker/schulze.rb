@@ -35,21 +35,7 @@ module Ranker
     end
 
     def calculate_strongest_paths
-      candidates.each do |middle|
-        candidates.each do |start|
-          next if middle == start
-
-          candidates.each do |finish|
-            next if middle == finish || start == finish
-
-            strongest_alternative = [graph.path(start, middle), graph.path(middle, finish)].min
-
-            if graph.path(start, finish) < strongest_alternative
-              graph.set_path(start, finish, strength: strongest_alternative)
-            end
-          end
-        end
-      end
+      graph.strengthen!
     end
 
     def calculate_winners

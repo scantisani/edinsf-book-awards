@@ -22,6 +22,26 @@ class PreferenceGraph
     paths[from].merge!(to => strength)
   end
 
+  def strengthen!
+    nodes.each do |middle|
+      nodes.each do |start|
+        next if middle == start
+
+        nodes.each do |finish|
+          next if middle == finish || start == finish
+
+          strongest_alternative = [path(start, middle), path(middle, finish)].min
+
+          if path(start, finish) < strongest_alternative
+            set_path(start, finish, strength: strongest_alternative)
+          end
+        end
+      end
+    end
+
+    self
+  end
+
   def ==(other)
     return false unless other.respond_to?(:paths, true)
 
@@ -42,6 +62,10 @@ class PreferenceGraph
 
   def initialize(paths = {})
     @paths = paths
+  end
+
+  def nodes
+    paths.keys
   end
 
   attr_accessor :paths

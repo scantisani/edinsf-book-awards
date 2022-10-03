@@ -97,6 +97,121 @@ RSpec.describe PreferenceGraph do
     end
   end
 
+  describe "#strengthen!" do
+    subject(:strong_graph) { initial_graph.strengthen! }
+
+    let(:initial_graph) {}
+
+    context "with an empty graph" do
+      let(:initial_graph) { described_class.empty }
+
+      it "changes nothing" do
+        expect(strong_graph).to eq(initial_graph)
+      end
+    end
+
+    context "with a graph that has nothing to strengthen" do
+      let(:initial_graph) do
+        described_class.with_paths(
+          {
+            a: {b: 2},
+            b: {a: 1}
+          }
+        )
+      end
+
+      it "changes nothing" do
+        expect(strong_graph).to eq(initial_graph)
+      end
+    end
+
+    context "with the initial graph in Example 1 from the Schulze paper" do
+      let(:initial_graph) do
+        described_class.with_paths(
+          {
+            a: {b: 2, c: 14, d: 10},
+            b: {a: 13, c: 6, d: 2},
+            c: {a: 7, b: 15, d: 12},
+            d: {a: 11, b: 19, c: 9}
+          }
+        )
+      end
+
+      let(:expected_graph) do
+        described_class.with_paths(
+          {
+            a: {b: 14, c: 14, d: 12},
+            b: {a: 13, c: 13, d: 12},
+            c: {a: 13, b: 15, d: 12},
+            d: {a: 13, b: 19, c: 13}
+          }
+        )
+      end
+
+      it "creates the final preference graph for Example 1" do
+        expect(strong_graph).to eq(expected_graph)
+      end
+    end
+
+    context "with initial graph in Example 7 from the Schulze paper" do
+      let(:initial_graph) do
+        described_class.with_paths(
+          {
+            a: {b: 13, c: 9, d: 9, e: 9, f: 13},
+            b: {a: 6, c: 11, d: 9, e: 10, f: 13},
+            c: {a: 10, b: 8, d: 11, e: 7, f: 10},
+            d: {a: 10, b: 10, c: 8, e: 14, f: 10},
+            e: {a: 10, b: 9, c: 12, d: 5, f: 10},
+            f: {a: 12, b: 6, c: 9, d: 9, e: 9}
+          }
+        )
+      end
+
+      let(:expected_graph) do
+        described_class.with_paths(
+          {
+            a: {b: 13, c: 11, d: 11, e: 11, f: 13},
+            b: {a: 12, c: 11, d: 11, e: 11, f: 13},
+            c: {a: 10, b: 10, d: 11, e: 11, f: 10},
+            d: {a: 10, b: 10, c: 12, e: 14, f: 10},
+            e: {a: 10, b: 10, c: 12, d: 11, f: 10},
+            f: {a: 12, b: 12, c: 11, d: 11, e: 11}
+          }
+        )
+      end
+
+      it "creates the final preference graph for Example 7" do
+        expect(strong_graph).to eq(expected_graph)
+      end
+    end
+
+    context "with the initial graph in Example 13 from the Schulze paper" do
+      let(:initial_graph) do
+        described_class.with_paths(
+          {
+            a: {b: 3, c: 2},
+            b: {a: 2, c: 4},
+            c: {a: 3, b: 1}
+          }
+        )
+      end
+
+      let(:expected_graph) do
+        described_class.with_paths(
+          {
+            a: {b: 3, c: 3},
+            b: {a: 3, c: 4},
+            c: {a: 3, b: 3}
+          }
+        )
+      end
+
+      it "creates the final preference graph for Example 13" do
+        expect(strong_graph).to eq(expected_graph)
+      end
+    end
+  end
+
   describe "#empty" do
     subject(:graph) { described_class.empty }
 

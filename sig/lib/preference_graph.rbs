@@ -4,12 +4,14 @@ class PreferenceGraph[T]
 
   def path: (T, T) -> Integer
   def set_path: (T, T, strength: Integer) -> void
+  def strengthen!: () -> PreferenceGraph[T]
 
   @paths: Hash[T, Hash[T, Integer]]
 
   private
 
   def initialize: (?Hash[T, Hash[T, Integer]]) -> void
+  def nodes: () -> Array[T]
 
   attr_accessor paths: Hash[T, Hash[T, Integer]]
 end
