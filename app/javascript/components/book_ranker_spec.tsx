@@ -1,10 +1,10 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
-import App from './app'
 import * as React from 'react'
 import { setupServer } from 'msw/node'
 import { rest } from 'msw'
+import BookRanker from './book_ranker'
 
-describe('App', () => {
+describe('BookRanker', () => {
   const books = [
     { id: 1, title: 'Priestdaddy', author: 'Patricia Lockwood' },
     { id: 2, title: 'The Pastel City', author: 'M. John Harrison' }
@@ -21,7 +21,7 @@ describe('App', () => {
   afterAll(() => server.close())
 
   it('renders a "Loading" placeholder, then cards with a title and author', async () => {
-    render(<App/>)
+    render(<BookRanker onRankingSave={() => {}}/>)
 
     expect(screen.getByText(/loading/i)).toBeInTheDocument()
 
@@ -39,7 +39,7 @@ describe('App', () => {
       })
     )
 
-    render(<App/>)
+    render(<BookRanker onRankingSave={() => {}}/>)
 
     await waitForElementToBeRemoved(() => screen.queryByText(/loading/i))
     expect(screen.getByText(/failed to load books/i)).toBeInTheDocument()
