@@ -12,7 +12,10 @@ const App = (): JSX.Element => {
     <div className='container is-max-desktop my-5'>
       <Title />
       <TopLevelNav saveStatus={saveStatus}/>
-      <BookRanker onRankingSave={setSaveStatus}/>
+
+      <main>
+        <BookRanker onRankingSave={setSaveStatus}/>
+      </main>
     </div>
   )
 }
