@@ -4,9 +4,12 @@ import TopLevelNav from './top_level_nav'
 import SaveStatus from '../interfaces/save_status'
 
 describe('TopLevelNav', () => {
-  it('renders the title', async () => {
-    render(<TopLevelNav saveStatus={SaveStatus.INITIAL}/>)
+  const saveStatus = SaveStatus.INITIAL
+
+  it('renders the "Your Ranking" and "Results" tabs', async () => {
+    render(<TopLevelNav saveStatus={saveStatus}/>)
 
     expect(screen.getByText(/your ranking/i)).toBeInTheDocument()
+    expect(screen.getByText(/results/i)).toBeInTheDocument()
   })
 })
