@@ -1,25 +1,8 @@
 import * as React from 'react'
 import SaveIndicator from './save_indicator'
 import SaveStatus from '../interfaces/save_status'
-import { Tab, TAB_NAMES } from '../interfaces/tab'
-
-const NavTab = ({ tab, selected = false, onTabClick }: { tab: Tab, selected?: boolean, onTabClick: (tab: Tab) => void }): JSX.Element => {
-  const name = TAB_NAMES[tab]
-
-  if (selected) {
-    return (
-      <div className={'navbar-item is-tab is-active'}>
-        {name}
-      </div>
-    )
-  } else {
-    return (
-      <a className={'navbar-item is-tab'} href="#" onClick={() => onTabClick(tab)}>
-        {name}
-      </a>
-    )
-  }
-}
+import { Tab } from '../interfaces/tab'
+import NavTab from './nav_tab'
 
 const TabList = ({ currentTab, onTabClick }: { currentTab: Tab, onTabClick: (tab: Tab) => void }): JSX.Element => {
   return (

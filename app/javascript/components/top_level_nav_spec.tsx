@@ -43,19 +43,4 @@ describe('TopLevelNav', () => {
       expect(screen.getByRole('link', { name: /your ranking/i })).toBeInTheDocument()
     })
   })
-
-  describe('when a tab is clicked', () => {
-    beforeEach(() => {
-      currentTab = Tab.YOUR_RANKING
-    })
-
-    it('calls `onTabClick`', async () => {
-      render(<TopLevelNav saveStatus={saveStatus} currentTab={currentTab} onTabClick={onTabClick}/>)
-
-      const resultsTab = screen.getByText(/results/i)
-      fireEvent.click(resultsTab)
-
-      expect(onTabClick).toHaveBeenCalledWith(Tab.RESULTS)
-    })
-  })
 })
