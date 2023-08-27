@@ -47,5 +47,8 @@
     "ts-jest": "^28.0.5",
     "typescript": "^4.7.4",
     "yarn": "^1.22.19"
+  },
+  "resolutions": {
+    "@cypress/request": "^3.0.0"
   }
 }
