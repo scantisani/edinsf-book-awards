@@ -13,6 +13,10 @@ export const getBooks = async (): Promise<AxiosResponse> => {
   return await axiosInstance().get('/books')
 }
 
+export const getResults = async (): Promise<AxiosResponse> => {
+  return await axiosInstance().get('/results')
+}
+
 export const createRanking = async (ids: number[]): Promise<AxiosResponse> => {
   return await axiosInstance().post('/rankings', { order: ids })
 }

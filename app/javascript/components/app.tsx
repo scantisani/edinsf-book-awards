@@ -5,12 +5,13 @@ import TopLevelNav from './top_level_nav'
 import BookRanker from './book_ranker'
 import Title from './title'
 import { Tab } from '../interfaces/tab'
+import Results from './results'
 
 const App = (): JSX.Element => {
   const [saveStatus, setSaveStatus] = useState(SaveStatus.INITIAL)
   const [currentTab, setCurrentTab] = useState(Tab.YOUR_RANKING)
 
-  const mainContent = currentTab === Tab.YOUR_RANKING ? <BookRanker onRankingSave={setSaveStatus}/> : <>Winner: The Memory Police</>
+  const mainContent = currentTab === Tab.YOUR_RANKING ? <BookRanker onRankingSave={setSaveStatus}/> : <Results />
 
   return (
     <div className='container is-max-desktop my-5'>

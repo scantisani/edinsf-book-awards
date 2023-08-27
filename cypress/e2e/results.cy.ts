@@ -5,6 +5,5 @@ describe('The results page', () => {
     cy.visit('/')
 
     cy.contains('Results').click()
-    cy.contains('Winner')
   })
 })
