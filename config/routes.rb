@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resources :books, only: :index
   resources :rankings, only: :create
+  resources :results, only: :index
   resources :users, only: :show, param: :uuid
 
   post "logout", to: "users#logout"
