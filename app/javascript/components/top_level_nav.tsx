@@ -1,22 +1,55 @@
 import * as React from 'react'
 import SaveIndicator from './save_indicator'
 import SaveStatus from '../interfaces/save_status'
+import { Tab, TAB_NAMES } from '../interfaces/tab'
 
-const TopLevelNav = ({ saveStatus }: { saveStatus: SaveStatus }): JSX.Element => {
+const NavTab = ({ tab, selected = false, onTabClick }: { tab: Tab, selected?: boolean, onTabClick: (tab: Tab) => void }): JSX.Element => {
+  const name = TAB_NAMES[tab]
+
+  if (selected) {
+    return (
+      <div className={'navbar-item is-tab is-active'}>
+        {name}
+      </div>
+    )
+  } else {
+    return (
+      <a className={'navbar-item is-tab'} href="#" onClick={() => onTabClick(tab)}>
+        {name}
+      </a>
+    )
+  }
+}
+
+const TabList = ({ currentTab, onTabClick }: { currentTab: Tab, onTabClick: (tab: Tab) => void }): JSX.Element => {
   return (
-    <nav className="navbar">
+    <>
+      {
+        (Object.keys(Tab) as Tab[])
+          .map(tab => {
+            return <NavTab key={tab} tab={tab} selected={tab === currentTab} onTabClick={onTabClick} />
+          })
+      }
+    </>
+  )
+}
+
+interface TopLevelNavProps {
+  saveStatus: SaveStatus
+  currentTab: Tab
+  onTabClick: (tab: Tab) => void
+}
+
+const TopLevelNav = ({ saveStatus, currentTab, onTabClick }: TopLevelNavProps): JSX.Element => {
+  return (
+    <nav className="navbar mb-4">
       <div className="navbar-start">
-        <div className="navbar-item">
-          <b>Your Ranking</b>
-        </div>
-        <a className="navbar-item" href="#">
-          Results
-        </a>
+        <TabList currentTab={currentTab} onTabClick={onTabClick} />
       </div>
 
       <div className="navbar-end">
         <div className="level-item">
-          <SaveIndicator saveStatus={saveStatus} />
+          <SaveIndicator saveStatus={saveStatus}/>
         </div>
       </div>
     </nav>
