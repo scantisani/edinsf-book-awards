@@ -1,25 +1,13 @@
+import BOOKS from '../support/books'
+
 describe('main page', () => {
   beforeEach(() => cy.login())
-
-  const books = [
-    { title: 'The Monk', author: 'Matthew Lewis' },
-    { title: 'Plum Rains', author: 'Andromeda Romano-Lax' },
-    { title: 'A Memory Called Empire', author: 'Arkady Martine' },
-    { title: 'The Memory Police', author: 'Yoko Ogawa' },
-    { title: 'Jonathan Strange & Mr Norrell', author: 'Susanna Clarke' },
-    { title: 'Before the Coffee Gets Cold', author: 'Toshikazu Kawaguchi' },
-    { title: 'Infinite Detail', author: 'Tim Maughan' },
-    { title: 'The Affirmation', author: 'Christopher Priest' },
-    { title: "Rocannon's World", author: 'Ursula K. le Guin' },
-    { title: 'The Elementals', author: 'Michael McDowell' },
-    { title: 'Civilwarland in Bad Decline', author: 'George Saunders' }
-  ]
 
   it('displays the title and a card for each book', () => {
     cy.visit('/')
 
     cy.contains('Your Ranking')
-    books.forEach(({ title, author }) => {
+    BOOKS.forEach(({ title, author }) => {
       cy.contains('.card', title).contains(author)
     })
   })
@@ -44,8 +32,8 @@ describe('main page', () => {
         .trigger('mouseup', { animationDistanceThreshold: 20 })
     }
 
-    const firstBookTitle = books[0].title
-    const secondBookTitle = books[1].title
+    const firstBookTitle = BOOKS[0].title
+    const secondBookTitle = BOOKS[1].title
 
     it('can be done via drag and drop', () => {
       cy.visit('/')
