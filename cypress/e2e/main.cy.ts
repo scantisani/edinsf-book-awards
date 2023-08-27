@@ -40,9 +40,8 @@ describe('main page', () => {
 
       dragCard(firstBookTitle, secondBookTitle)
 
-      cy.contains('.card', secondBookTitle)
-        .next()
-        .contains(firstBookTitle)
+      cy.contains('.card', secondBookTitle).contains('#1')
+      cy.contains('.card', firstBookTitle).contains('#2')
     })
 
     it('triggers the message "Saving" while saving, then "Saved" on success', () => {
@@ -72,9 +71,8 @@ describe('main page', () => {
       cy.contains('Saved')
 
       cy.reload()
-      cy.contains('.card', secondBookTitle)
-        .next()
-        .contains(firstBookTitle)
+      cy.contains('.card', secondBookTitle).contains('#1')
+      cy.contains('.card', firstBookTitle).contains('#2')
     })
   })
 })

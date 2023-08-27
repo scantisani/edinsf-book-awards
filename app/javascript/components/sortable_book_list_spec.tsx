@@ -19,10 +19,15 @@ describe('SortableBookList', () => {
     render(<SortableBookList books={books} onBooksChange={() => {}} />)
 
     expect(screen.getAllByRole('button').length).toEqual(3)
-    for (const { title, author } of books) {
-      expect(screen.getByText(title)).toBeInTheDocument()
-      expect(screen.getByText(author)).toBeInTheDocument()
-    }
+
+    expect(screen.getByText('#1 Priestdaddy')).toBeInTheDocument()
+    expect(screen.getByText('Patricia Lockwood')).toBeInTheDocument()
+
+    expect(screen.getByText('#2 The Pastel City')).toBeInTheDocument()
+    expect(screen.getByText('M. John Harrison')).toBeInTheDocument()
+
+    expect(screen.getByText('#3 Dreamsnake')).toBeInTheDocument()
+    expect(screen.getByText('Vonda N. McIntyre')).toBeInTheDocument()
   })
 
   // see Cypress spec for a more comprehensive drag-and-drop test

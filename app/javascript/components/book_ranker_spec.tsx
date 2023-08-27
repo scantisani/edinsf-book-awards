@@ -26,10 +26,12 @@ describe('BookRanker', () => {
     expect(screen.getByText(/loading/i)).toBeInTheDocument()
 
     await waitForElementToBeRemoved(() => screen.queryByText(/loading/i))
-    for (const { title, author } of books) {
-      expect(screen.getByText(title)).toBeInTheDocument()
-      expect(screen.getByText(author)).toBeInTheDocument()
-    }
+
+    expect(screen.getByText('#1 Priestdaddy')).toBeInTheDocument()
+    expect(screen.getByText('Patricia Lockwood')).toBeInTheDocument()
+
+    expect(screen.getByText('#2 The Pastel City')).toBeInTheDocument()
+    expect(screen.getByText('M. John Harrison')).toBeInTheDocument()
   })
 
   it('renders "Failed to load books" when the request fails', async () => {

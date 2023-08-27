@@ -5,7 +5,7 @@ import * as React from 'react'
 const BookList = ({ books }: { books: Book[] }): JSX.Element => {
   return (
     <>
-      {books.map(book => <BookCard {...book} key={book.id}/>)}
+      {books.map((book, index) => <BookCard {...book} position={index} key={book.id}/>)}
     </>
   )
 }
